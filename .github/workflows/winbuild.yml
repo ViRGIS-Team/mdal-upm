@@ -1,6 +1,6 @@
 name: MDAL Win32 Github Build
 on:
-  workflow_dispatch
+  workflow_dispatch:
     inputs:
       path:
         description: "Path to Source"
