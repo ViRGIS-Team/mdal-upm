@@ -17,3 +17,6 @@ jobs:
     
       - name: INstall GDAL
         run: conda install -c conda-forge gdal
+      
+      - run: cd C:\Miniconda
+      - run: dir
