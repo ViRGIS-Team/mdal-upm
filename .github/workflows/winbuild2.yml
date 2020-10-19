@@ -13,10 +13,12 @@ jobs:
           repository: 'lutraconsulting/MDAL'
 
       - name: Install Conda
-        uses: s-weigand/setup-conda@v1.0.5
+        uses: conda-incubator/setup-miniconda@v1.7.0
     
-      - name: INstall GDAL
+      - name: Install GDAL
+        shell: powershell
         run: conda install -c conda-forge gdal
       
-      - run: cd C:\Miniconda
-      - run: dir
+      - name: info
+        shell: powershell
+        run: conda info
