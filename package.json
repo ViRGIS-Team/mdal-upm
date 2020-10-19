@@ -1,0 +1,25 @@
+{
+  "name": "com.virgis.mdal",
+  "version": "0.7.0",
+  "displayName": "Mdal",
+  "description": "Open-Source Mesh Data Translation LIbrary",
+  "unity": "2018.1",
+  "keywords": [
+    "mdal",
+    "gdal",
+    "gis",
+    "geospatial",
+    "mesh",
+    "data"
+  ],
+  "author": {
+    "name": "Virgis Team",
+    "email": "info@virgis.og",
+    "url": "https://www.virgis.org"
+  },
+  "hideInEditor": false,
+  "dependencies": {
+    "com.virgis.geometry3sharp": "1.0.4",
+    "com.virgis.gdal": "3.1.2"
+  }
+}
