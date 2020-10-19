@@ -1,10 +1,10 @@
 name: MDAL Win32 Github Build
 on: workflow_dispatch
   inputs:
-  path:
-    description: "Path to Source"
-    required: true
-    default: "none"
+    path:
+      description: "Path to Source"
+      required: true
+      default: "none"
   
 jobs:
   windows_tests:
