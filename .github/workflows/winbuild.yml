@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout MDAL
         uses: actions/checkout@v2
-         with:
+        with:
           # Repository name with owner. For example, actions/checkout
           # Default: ${{ github.repository }}
           repository: 'lutraconsulting/MDAL'
