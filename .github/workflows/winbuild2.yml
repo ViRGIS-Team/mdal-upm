@@ -37,7 +37,7 @@ jobs:
             cd $env:GITHUB_WORKSPACE
             mkdir build
             cd build
-            exec { cmake -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Rel  -DENABLE_TESTS=ON  -DNETCDF_PREFIX="C:\Miniconda\envs\test" -DHDF5_ROOT="C:\Miniconda\envs\test" -DGDAL_DIR="C:\OSGeo4W64" -DGDAL_LIBRARY="C:\Miniconda\envs\test\Library\lib\gdal_i.lib" -DGDAL_INCLUDE_DIR="C:\Miniconda\envs\test\Library\include" -DLIBXML2_LIBRARIES="C:\Miniconda\envs\test\Library\lib\libxml2.lib" -DLIBXML2_INCLUDE_DIR="C:\Miniconda\envs\test\Library\include\libxml2" ..  }
+            exec { cmake -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Rel  -DENABLE_TESTS=ON  -DNETCDF_PREFIX="C:\Miniconda\envs\test\Library" -DHDF5_ROOT="C:\Miniconda\envs\test\Library" -DGDAL_DIR="C:\Miniconda\envs\test\Library" -DGDAL_LIBRARY="C:\Miniconda\envs\test\Library\lib\gdal_i.lib" -DGDAL_INCLUDE_DIR="C:\Miniconda\envs\test\Library\include" -DLIBXML2_LIBRARIES="C:\Miniconda\envs\test\Library\lib\libxml2.lib" -DLIBXML2_INCLUDE_DIR="C:\Miniconda\envs\test\Library\include\libxml2" ..  }
             exec { cmake --build . }
       - name: Run tests
         shell: pwsh
