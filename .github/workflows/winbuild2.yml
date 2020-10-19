@@ -1,0 +1,17 @@
+name: MDAL Win32 Github Build v2
+on:
+  workflow_dispatch:
+  
+jobs:
+  windows_build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout MDAL
+        uses: actions/checkout@v2
+        with:
+          repository: 'lutraconsulting/MDAL'
+
+      - name: Install Conda
+        uses: s-weigand/setup-condav1.0.5
+        run: conda install gdal
