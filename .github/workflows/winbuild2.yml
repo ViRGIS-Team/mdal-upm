@@ -14,4 +14,6 @@ jobs:
 
       - name: Install Conda
         uses: s-weigand/setup-condav1.0.5
+    
+      - name: INstall GDAL
         run: conda install gdal
