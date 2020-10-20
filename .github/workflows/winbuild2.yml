@@ -52,3 +52,30 @@ jobs:
             $env:PATH="$env:GITHUB_WORKSPACE\build\tool\Debug\;$env:GITHUB_WORKSPACE\build\mdal\Debug;$env:PATH"
             cd $env:GITHUB_WORKSPACE\build
             exec { ctest -VV --exclude-regex "mdalinfo_test" }
+          
+      - name: Copy mdal.dll
+        shell: cmd
+        run: |
+          copy "$env:GITHUB_WORKSPACE\build\mdal\debug\mdall.dll" ~
+          
+      - name: Checkout Local
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: Update mdal.dll
+        shell: cmd
+        run: |
+          copy ~\mdal.dll "$env:GITHUB_WORKSPACE\Assets\Plugins
+          
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Add changes" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          
