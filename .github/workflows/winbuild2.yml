@@ -67,7 +67,7 @@ jobs:
       - name: Copy mdal.dll
         shell: cmd
         run: |
-          copy "$env:GITHUB_WORKSPACE\build\mdal\debug\mdall.dll" ~
+          copy "$env:GITHUB_WORKSPACE\build\mdal\debug\mdal.dll" ~
           
       - name: Checkout Local
         uses: actions/checkout@v2
