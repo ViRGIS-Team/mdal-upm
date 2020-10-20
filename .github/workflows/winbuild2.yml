@@ -65,11 +65,10 @@ jobs:
             exec { ctest -VV --exclude-regex "mdalinfo_test" }
           
       - name: Copy mdal.dll
-        shell: cmd
+        shell: pwsh
         run: |
           dir $env:GITHUB_WORKSPACE\build
-          dir c:\
-          copy /B $env:GITHUB_WORKSPACE\build\mdal\Debug\mdal.dll C:\
+          copy /B $env:GITHUB_WORKSPACE\build\mdal\Debug\mdal.dll C:\temp
           
       - name: Checkout Local
         uses: actions/checkout@v2
