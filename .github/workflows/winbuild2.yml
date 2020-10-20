@@ -68,7 +68,7 @@ jobs:
         shell: pwsh
         run: |
           dir $env:GITHUB_WORKSPACE\build
-          copy /B $env:GITHUB_WORKSPACE\build\mdal\Debug\mdal.dll C:\temp
+          copy-item -Path $env:GITHUB_WORKSPACE\build\mdal\Debug\mdal.dll -Destination C:\temp
           
       - name: Checkout Local
         uses: actions/checkout@v2
@@ -78,7 +78,7 @@ jobs:
       - name: Update mdal.dll
         shell: cmd
         run: |
-          copy /B C:\mdal.dll $env:GITHUB_WORKSPACE\Assets\Plugins
+          copy-item -Path C:\temp\mdal.dll -Destination $env:GITHUB_WORKSPACE\Assets\Plugins
           
       - name: Commit files
         run: |
