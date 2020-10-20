@@ -67,7 +67,7 @@ jobs:
       - name: Copy mdal.dll
         shell: cmd
         run: |
-          dir "$env:GITHUB_WORKSPACE\build\mdal\Debug"
+          dir "$env:GITHUB_WORKSPACE\build"
           dir c:\
           copy /B "$env:GITHUB_WORKSPACE\build\mdal\Debug\mdal.dll" C:\
           
