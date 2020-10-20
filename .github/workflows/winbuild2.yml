@@ -75,8 +75,10 @@ jobs:
         with:
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+          repository: 'Virgis-team/mdal_upm'
+
       - name: Update mdal.dll
-        shell: cmd
+        shell: pwsh
         run: |
           copy-item -Path C:\temp\mdal.dll -Destination $env:GITHUB_WORKSPACE\Assets\Plugins
           
