@@ -17,7 +17,7 @@ jobs:
         with:
           # Repository name with owner. For example, actions/checkout
           # Default: ${{ github.repository }}
-          repository: 'lutraconsulting/MDAL'
+          repository: 'Virgis-team/MDAL'
 
       - name: Choco install qgis
         uses: crazy-max/ghaction-chocolatey@v1
