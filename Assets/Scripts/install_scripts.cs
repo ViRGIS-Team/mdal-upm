@@ -58,7 +58,7 @@ namespace Mdal {
 
                                 compiler.WaitForExit();
                             }
-                            currentVersion = response.Split(' ')[1];
+                            currentVersion = response.Split(new char[2] {' ','\r'})[1];
                         } catch (Exception e)
                         {
                             Debug.Log($"Mdal Version error : {e.ToString()}");
