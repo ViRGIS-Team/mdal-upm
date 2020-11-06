@@ -33,7 +33,11 @@ namespace Mdal {
                 {
                     string pluginPath = Path.Combine(Application.dataPath, "Conda");
                     if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
+#if UNITY_STANDALONE_WIN
+                    string file = Path.Combine(pluginPath, test);
+#else
                     string file = Path.Combine(pluginPath, "bin", test);
+#endif
                     if (!File.Exists(file))
                     {
                         UpdatePackage();
