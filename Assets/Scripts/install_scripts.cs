@@ -94,7 +94,7 @@ namespace Mdal {
                 compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass {Path.Combine(path, "install_script.ps1")} -package mdal " +
                                                     $"-install {install} " +
                                                     $"-destination {pluginPath} " +
-                                                    $"-so_list mdal";
+                                                    $"-test {test}";
 #elif UNITY_STANDALONE_OSX
                 compiler.StartInfo.FileName = "/bin/bash";
                 compiler.StartInfo.Arguments = $" {Path.Combine(path, "install_script.sh")} " +
