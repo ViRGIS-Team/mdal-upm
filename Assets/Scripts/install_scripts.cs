@@ -5,12 +5,21 @@ using System.Diagnostics;
 using System;
 using Debug = UnityEngine.Debug;
 
+
 namespace Mdal {
 
     public class Install{
 
-        const string sharedObject = "mdal.dll";
+#if UNITY_STANDALONE_WIN
+        const string test = "mdalinfo.exe";
+#elif UNITY_STANDALONE_OSX
+        const string test = "mdalinfo";
+#elif UNITY_STANDALONE_LINUX
+        const string test = "mdalinfo";
+#endif 
+ 
         const string packageVersion = "0.7.2";
+
 
         [InitializeOnLoadMethod]
         static void OnProjectLoadedinEditor()
@@ -25,14 +34,35 @@ namespace Mdal {
                 {
                     string pluginPath = Path.Combine(Application.dataPath, "Conda");
                     if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
-                    string file = Path.Combine(pluginPath, sharedObject);
+                    string file = Path.Combine(pluginPath, test);
                     if (!File.Exists(file))
                     {
                         UpdatePackage();
                     }
                     else if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
-                        string currentVersion = Mdal.GetVersion();
+                        string currentVersion = "0";
+                        string response;
+                        try
+                        {
+                            using (Process compiler = new Process())
+                            {
+                                compiler.StartInfo.FileName = Path.Combine( pluginPath, test );
+                                compiler.StartInfo.Arguments = $" -h";
+                                compiler.StartInfo.UseShellExecute = false;
+                                compiler.StartInfo.RedirectStandardOutput = true;
+                                compiler.StartInfo.CreateNoWindow = true;
+                                compiler.Start();
+
+                                response = compiler.StandardOutput.ReadToEnd();
+
+                                compiler.WaitForExit();
+                            }
+                            currentVersion = response.Split(' ')[1];
+                        } catch (Exception e)
+                        {
+                            Debug.Log($"Mdal Version error : {e.ToString()}");
+                        }
                         if (currentVersion != packageVersion)
                         {
                             UpdatePackage();
@@ -43,7 +73,7 @@ namespace Mdal {
                 catch (Exception e)
                 {
                     // do nothing
-                    Debug.Log($"Error in Conda Package {sharedObject} : {e.ToString()}");
+                    Debug.Log($"Error in Conda Package {test} : {e.ToString()}");
                 };
             };
 
@@ -55,16 +85,26 @@ namespace Mdal {
             Debug.Log("Mdal Install Script Awake"); 
             string pluginPath = Path.Combine(Application.dataPath, "Conda");
             string path = Path.GetDirectoryName(new StackTrace(true).GetFrame(0).GetFileName());
-            string exec = Path.Combine(path, "install_script.ps1");
             string response;
             string install = $"mdal={packageVersion}";
             using (Process compiler = new Process())
             {
+#if UNITY_STANDALONE_WIN
                 compiler.StartInfo.FileName = "powershell.exe";
-                compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass {exec} -package mdal " +
-                                                    $"-install mdal {install} " +
+                compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass {Path.Combine(path, "install_script.ps1")} -package mdal " +
+                                                    $"-install {install} " +
                                                     $"-destination {pluginPath} " +
                                                     $"-so_list mdal";
+#elif UNITY_STANDALONE_OSX
+                compiler.StartInfo.FileName = "/bin/bash";
+                compiler.StartInfo.Arguments = $" {Path.Combine(path, "install_script.sh")} " +
+                                                "-p mdal " +
+                                                $"-i {install} " +
+                                                $"-d {pluginPath} " +
+                                                $"-t {test} ";
+#elif UNITY_STANDALONE_LINUX
+
+#endif
                 compiler.StartInfo.UseShellExecute = false;
                 compiler.StartInfo.RedirectStandardOutput = true;
                 compiler.StartInfo.CreateNoWindow = true;
