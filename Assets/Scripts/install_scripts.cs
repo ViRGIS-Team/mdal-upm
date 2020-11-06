@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System;
 using Debug = UnityEngine.Debug;
 
-
 namespace Mdal {
 
     public class Install{
@@ -34,7 +33,7 @@ namespace Mdal {
                 {
                     string pluginPath = Path.Combine(Application.dataPath, "Conda");
                     if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
-                    string file = Path.Combine(pluginPath, test);
+                    string file = Path.Combine(pluginPath, "bin", test);
                     if (!File.Exists(file))
                     {
                         UpdatePackage();
@@ -47,7 +46,7 @@ namespace Mdal {
                         {
                             using (Process compiler = new Process())
                             {
-                                compiler.StartInfo.FileName = Path.Combine( pluginPath, test );
+                                compiler.StartInfo.FileName = Path.Combine( pluginPath, "bin", test );
                                 compiler.StartInfo.Arguments = $" -h";
                                 compiler.StartInfo.UseShellExecute = false;
                                 compiler.StartInfo.RedirectStandardOutput = true;
@@ -58,7 +57,7 @@ namespace Mdal {
 
                                 compiler.WaitForExit();
                             }
-                            currentVersion = response.Split(new char[2] {' ','\r'})[1];
+                            currentVersion = response.Split(new char[3] {' ','\r', '\n'})[1];
                         } catch (Exception e)
                         {
                             Debug.Log($"Mdal Version error : {e.ToString()}");
