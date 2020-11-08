@@ -26,7 +26,7 @@ For more details - see the documentation.
 
 The MDAL library is loaded as an unmanaged native plugin. This plugin will load correctly in the player when built. See below for a note about use in the Editor.
 
-This Library ONLY works on Windows.
+This Library works on Windows and Mac based platforms.
 
 ## Running in the Editor
 
