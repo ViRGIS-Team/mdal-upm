@@ -1,3 +1,5 @@
+[![openupm](https://img.shields.io/npm/v/com.virgis.mdal?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.virgis.mdal/)
+
 # Unity Package for MDAL
 
 The [Mesh Data Abstraction Layer](https://www.mdal.xyz/) (MDAL) s a C++ library for handling unstructured mesh data released with MIT license. It provides a single data model for multiple supported data formats. MDAL is used by QGIS for data access for mesh layers. 
@@ -10,7 +12,9 @@ This Package is part of the [ViRGiS project](https://www.virgis.org/) - bringing
 
 ## Installation
 
-The Package can be installed using the Unity Package Manager directly from the [GitHub Repo](https://github.com/ViRGIS-Team/mdal-upm).
+The Package can be installed from [Open UPM](https://openupm.com/packages/com.virgis.mdal/). 
+
+The Package can also be installed using the Unity Package Manager directly from the [GitHub Repo](https://github.com/ViRGIS-Team/mdal-upm).
 
 This package is dependent on the following packages having been loaded (and the UPM / GH combination does not allow package dependencies  - so you have to do that yourself) :
 
