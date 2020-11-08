@@ -18,7 +18,7 @@ This package is dependent on the following packages having been loaded (and the 
 
 - GDAL - [UPM GH repo](https://github.com/ViRGIS-Team/gdal-upm).
 
-## Developement and Use in the player
+## Development and Use in the player
 
 The scripts for accessing MDAL data are included in the `Mdal`namespace and follow the [MDAL C Api](https://www.mdal.xyz/api/mdal_c_api.html).
 
@@ -30,13 +30,17 @@ This Library ONLY works on Windows.
 
 ## Running in the Editor
 
-The native plugins will NOT work out of the box in the Editor.
+This package uses [Conda](https://docs.conda.io/en/latest/) to download the latest version of MDAL.
 
-This is because of some problems with the DLL search paths and the directory structure used by Unity for packages - see more discussion [here](https://forum.unity.com/threads/plugins-and-resources-inside-package.730328/#post-6432950).
+For this package to work , the development machine MUST have a working copy of Conda (either full Conda or Miniconda) installed and in the path. The following CLI command should work without change or embellishment:
 
-The fix is tro create a copy of the Plugins folder from the  [GDAL Package](https://github.com/ViRGIS-Team/gdal-upm) on your development machine outside of the Unity Project folder structure and add this to the system Path.
+```
+conda info
+```
 
-I usually do this by creating a clone of the GDAL package on my development machine and adding this to the path (noting that you need to add the Plugins folder - i.e. the location of the DLLs - and not the root folder to the path!). 
+The package will keep the installation of Mdal in `Assets\Conda`. You may want to exclude this folder from source control.
+
+This package installs the GDAL package, which copies data for GDAL and for PROJ into the `Assets/StreamingAssets`folder. You may also want to exclude this folder from source control.
 
 ## Documentation
 
