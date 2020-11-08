@@ -6,11 +6,13 @@ Param(
     ) 
 
 conda create --name upm -y
-conda activate upm
-conda install $install -y --no-deps
+conda install $install -y --name upm --no-deps
 
-$env = conda info --json | ConvertFrom-Json 
-$conda_bin = -join($env.active_prefix, "\Library\bin")
+$env = conda info --envs
+$temp = conda info --envs | Select-String  -Pattern 'upm'
+$temp -match "C\:.*"
+$conda_bin = -join($matches[0], "\Library/bin")
+
 Write-Output "Processing *.dll"
 $file = -join($conda_bin, '/*.dll' )
 Write-Output "Copy $file to $destination"
@@ -21,5 +23,4 @@ $file = -join($conda_bin, '/', $test )
 Write-Output "Copy $file to $destination"
 Copy-Item $file -Destination $destination
 
-conda deactivate
 conda remove --name upm --all -y
