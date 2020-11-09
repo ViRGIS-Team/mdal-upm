@@ -4,10 +4,6 @@
         "geometry3Sharp"
     ],
     "includePlatforms": [
-        "Editor",
-        "WSA",
-        "WindowsStandalone32",
-        "WindowsStandalone64"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
