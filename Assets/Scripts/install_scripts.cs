@@ -98,15 +98,13 @@ namespace Mdal {
                                                     $"-install {install} " +
                                                     $"-destination '{pluginPath}' " +
                                                     $"-test {test}";
-#elif UNITY_STANDALONE_OSX
+#else
                 compiler.StartInfo.FileName = "/bin/bash";
                 compiler.StartInfo.Arguments = $" \"{Path.Combine(path, "install_script.sh")}\" " +
                                                 "-p mdal " +
                                                 $"-i {install} " +
                                                 $"-d '{pluginPath}' " +
                                                 $"-t {test} ";
-#elif UNITY_STANDALONE_LINUX
-
 #endif
                 compiler.StartInfo.UseShellExecute = false;
                 compiler.StartInfo.RedirectStandardOutput = true;
