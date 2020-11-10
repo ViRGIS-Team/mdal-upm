@@ -94,16 +94,16 @@ namespace Mdal {
             {
 #if UNITY_STANDALONE_WIN
                 compiler.StartInfo.FileName = "powershell.exe";
-                compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass {Path.Combine(path, "install_script.ps1")} -package mdal " +
+                compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass \"{Path.Combine(path, "install_script.ps1")}\" -package mdal " +
                                                     $"-install {install} " +
-                                                    $"-destination {pluginPath} " +
+                                                    $"-destination '{pluginPath}' " +
                                                     $"-test {test}";
 #elif UNITY_STANDALONE_OSX
                 compiler.StartInfo.FileName = "/bin/bash";
-                compiler.StartInfo.Arguments = $" {Path.Combine(path, "install_script.sh")} " +
+                compiler.StartInfo.Arguments = $" \"{Path.Combine(path, "install_script.sh")}\" " +
                                                 "-p mdal " +
                                                 $"-i {install} " +
-                                                $"-d {pluginPath} " +
+                                                $"-d '{pluginPath}' " +
                                                 $"-t {test} ";
 #elif UNITY_STANDALONE_LINUX
 
