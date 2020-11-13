@@ -5,15 +5,16 @@ using System.Diagnostics;
 using System;
 using Debug = UnityEngine.Debug;
 
+#if UNITY_EDITOR
 namespace Mdal {
 
     public class Install{
 
-#if UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN
         const string test = "mdalinfo.exe";
-#elif UNITY_STANDALONE_OSX
+#elif UNITY_EDITOR_OSX
         const string test = "mdalinfo";
-#elif UNITY_STANDALONE_LINUX
+#elif UNITY_EDITOR_LINUX
         const string test = "mdalinfo";
 #endif 
  
@@ -33,7 +34,7 @@ namespace Mdal {
                 {
                     string pluginPath = Path.Combine(Application.dataPath, "Conda");
                     if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
-#if UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN
                     string file = Path.Combine(pluginPath, test);
 #else
                     string file = Path.Combine(pluginPath, "bin", test);
@@ -41,6 +42,7 @@ namespace Mdal {
                     if (!File.Exists(file))
                     {
                         UpdatePackage();
+                        AssetDatabase.Refresh();
                     }
                     else if (!EditorApplication.isPlayingOrWillChangePlaymode)
                     {
@@ -70,8 +72,8 @@ namespace Mdal {
                         {
                             UpdatePackage();
                         }
+                        AssetDatabase.Refresh();
                     }
-                    AssetDatabase.Refresh();
                 }
                 catch (Exception e)
                 {
@@ -92,7 +94,7 @@ namespace Mdal {
             string install = $"mdal={packageVersion}";
             using (Process compiler = new Process())
             {
-#if UNITY_STANDALONE_WIN
+#if UNITY_EDITOR_WIN
                 compiler.StartInfo.FileName = "powershell.exe";
                 compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass \"{Path.Combine(path, "install_script.ps1")}\" -package mdal " +
                                                     $"-install {install} " +
@@ -119,3 +121,4 @@ namespace Mdal {
         }
     }
 }
+#endif
