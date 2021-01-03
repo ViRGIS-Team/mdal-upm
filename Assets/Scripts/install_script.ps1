@@ -6,7 +6,7 @@ Param(
     ) 
 
 conda create --name upm -y
-conda install $install -y --name upm --no-deps
+conda install -c conda-forge $install -y --name upm --no-deps
 
 $env = conda info --envs
 $temp = conda info --envs | Select-String  -Pattern 'upm'
