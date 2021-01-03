@@ -13,6 +13,19 @@ This Package is part of the [ViRGiS project](https://www.virgis.org/) - bringing
 ## Installation
 
 The Package can be installed from [Open UPM](https://openupm.com/packages/com.virgis.mdal/). If you use this method, the dependencies will be automatically loaded provided the relevent scoped registry is included in your project's `manifest.json` :
+```
+scopedRegistries": [
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.openupm",
+        "com.virgis.geometry3sharp",
+        "com.virgis.gdal"
+      ]
+    }
+  ],
+```
 
 
 The Package can also be installed using the Unity Package Manager directly from the [GitHub Repo](https://github.com/ViRGIS-Team/mdal-upm).
