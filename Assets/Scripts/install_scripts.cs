@@ -18,7 +18,7 @@ namespace Mdal {
         const string test = "mdalinfo";
 #endif 
  
-        const string packageVersion = "0.7.2";
+        const string packageVersion = "0.7.4";
 
 
         [InitializeOnLoadMethod]
