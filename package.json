@@ -1,8 +1,8 @@
 {
   "name": "com.virgis.mdal",
-  "version": "0.8.0",
+  "version": "0.8.100",
   "displayName": "Mdal",
-  "description": "Open-Source Mesh Data Translation LIbrary",
+  "description": "Open-Source Mesh Data Translation LIbrary v0.8.0",
   "unity": "2018.1",
   "keywords": [
     "mdal",
@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "com.virgis.geometry3sharp": "1.0.4",
-    "com.virgis.gdal": "3.1.4-b3"
+    "com.virgis.gdal": "3.2.2"
   }
 }
 

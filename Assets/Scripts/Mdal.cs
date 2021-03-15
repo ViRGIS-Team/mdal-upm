@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
@@ -122,16 +123,41 @@ namespace Mdal {
 
         public Datasource(string uri) {
             this.uri = uri;
+        }
+
+        public static Datasource Load(string uri)
+        {
+            Datasource ds = new Datasource(uri);
             string ret = Mdal.GetNames(uri);
             MDAL_Status status = Mdal.LastStatus();
-            if (ret == null &&  status != MDAL_Status.None)
+            if (ret == null && status != MDAL_Status.None)
                 throw new Exception(status.ToString() + uri);
-            meshes = ret.Split( new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            ds.meshes = ret.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            return ds;
+        }
+
+        public static Task<Datasource> LoadAsync(string uri)
+        {
+            Task<Datasource> t1 = new Task<Datasource>(() =>
+            {
+                return Datasource.Load(uri);
+            });
+            t1.Start();
+            return t1;
         }
 
         public MdalMesh GetMesh(int index) {
             StringBuilder stb = new StringBuilder(meshes[index]);
             return Mdal.MDAL_LoadMesh(stb);
+        }
+
+        public Task<MdalMesh> GetMeshAsync(int index)
+        {
+            Task<MdalMesh> t1 = new Task<MdalMesh>(() => {
+                return GetMesh(index);
+            });
+            t1.Start();
+            return t1;
         }
 
     }
@@ -203,16 +229,6 @@ namespace Mdal {
 
         public static implicit operator SimpleMesh(MdalMesh thisMesh) => thisMesh.ToMesh();
         public static implicit operator DMesh3(MdalMesh thisMesh) => thisMesh.ToDMesh();
-        //public static implicit operator BakedPointCloud(MdalMesh thisMesh) {
-        //    BakedPointCloud pc = new BakedPointCloud();
-        //    int vcount = Mdal.MDAL_M_vertexCount(thisMesh);
-        //    MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(thisMesh);
-        //    VectorArray3d v = vi.GetVertexes(vcount);
-        //    bool hasColors;
-        //    VectorArray3f c = thisMesh.GetColors(vcount, out hasColors);
-        //    pc.Initialize(v.AsVector3d(), c.AsVector3f(), vcount);
-        //    return pc;
-        //}
     }
 
     public sealed class MdalVertexIterator : SafeHandleZeroOrMinusOneIsInvalid {
