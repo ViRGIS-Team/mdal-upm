@@ -14,8 +14,10 @@ namespace Mdal {
         const string test = "mdalinfo.exe";
 #elif UNITY_EDITOR_OSX
         const string test = "mdalinfo";
+        const string basharg = "-l";
 #elif UNITY_EDITOR_LINUX
         const string test = "mdalinfo";
+        const string basharg = "-i";
 #endif 
  
         const string packageVersion = "0.8.0";
@@ -102,7 +104,7 @@ namespace Mdal {
                                                     $"-test {test}";
 #else
                 compiler.StartInfo.FileName = "/bin/bash";
-                compiler.StartInfo.Arguments = $" -i \"{Path.Combine(path, "install_script.sh")}\" " +
+                compiler.StartInfo.Arguments = $" {basharg} \"{Path.Combine(path, "install_script.sh")}\" " +
                                                 "-p mdal " +
                                                 $"-i {install} " +
                                                 $"-d '{pluginPath}' " +
