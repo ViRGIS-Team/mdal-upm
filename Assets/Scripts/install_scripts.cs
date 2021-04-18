@@ -102,7 +102,7 @@ namespace Mdal {
                                                     $"-test {test}";
 #else
                 compiler.StartInfo.FileName = "/bin/bash";
-                compiler.StartInfo.Arguments = $" -l  \"{Path.Combine(path, "install_script.sh")}\" " +
+                compiler.StartInfo.Arguments = $" -i \"{Path.Combine(path, "install_script.sh")}\" " +
                                                 "-p mdal " +
                                                 $"-i {install} " +
                                                 $"-d '{pluginPath}' " +
