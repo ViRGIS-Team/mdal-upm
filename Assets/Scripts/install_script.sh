@@ -10,21 +10,5 @@ do
    esac
 done
 
+conda install -c conda-forge --prefix $destination --copy --mkdir $install -y --no-deps
 
-echo "Package is $package"
-echo "Install is $package"
-conda create --name upm -y
-conda install -c conda-forge --name upm $install -y --no-deps
-
-env=`conda info --envs |grep upm | grep -o '/.*'`
-
-echo "copy $env/lib/*.dylib to $destination" 
-mkdir -p "$destination/lib" && cp -avf "$env"/lib/*.dylib "$destination/lib"
-
-echo "copy $env/lib/*.so to $destination" 
-mkdir -p "$destination/lib" && cp -avf "$env"/lib/*.so "$destination/lib"
-
-echo "copy $env/bin/$test $destination"
-mkdir -p "$destination/bin" && cp -avf "$env"/bin/$test "$destination/bin"
-
-conda remove --name upm --all -y

@@ -35,7 +35,7 @@ namespace Mdal {
                     string pluginPath = Path.Combine(Application.dataPath, "Conda");
                     if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
 #if UNITY_EDITOR_WIN
-                    string file = Path.Combine(pluginPath, test);
+                    string file = Path.Combine(pluginPath, "Library", "bin", test);
 #else
                     string file = Path.Combine(pluginPath, "bin", test);
 #endif
