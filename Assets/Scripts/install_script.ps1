@@ -2,7 +2,7 @@ Param(
     [string]$package,
     [string]$install,  
     [string]$destination,
-    [string]$test
+    [string]$shared_assets
     )
 
 conda install -c conda-forge --prefix $destination --copy  --mkdir $install -y
@@ -25,13 +25,13 @@ Set-Location $destination
 
 Remove-Item *.dll
 
-Remove-Item share -Recurse
+Get-ChildItem -exclude .*, conda-meta, Library | Remove-Item -Recurse
 
 Set-Location Library
 
 Get-ChildItem -exclude bin | Remove-Item -Recurse
 Set-Location bin
-Get-ChildItem -exclude *.dll, $test | Remove-Item -Recurse
+Get-ChildItem -exclude *.dll, *.exe | Remove-Item -Recurse
 Remove-Item api-*
 Remove-Item vcr*
 Remove-Item msvcp*
