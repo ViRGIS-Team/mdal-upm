@@ -100,14 +100,15 @@ namespace Mdal {
                 compiler.StartInfo.FileName = "powershell.exe";
                 compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass \"{Path.Combine(path, "install_script.ps1")}\" -package mdal " +
                                                     $"-install {install} " +
-                                                    $"-destination '{pluginPath}'" +
+                                                    $"-destination '{pluginPath}' " +
                                                     $"-shared_assets '{Application.streamingAssetsPath}' ";
 #else
                 compiler.StartInfo.FileName = "/bin/bash";
                 compiler.StartInfo.Arguments = $" {basharg} \"{Path.Combine(path, "install_script.sh")}\" " +
                                                 "-p mdal " +
                                                 $"-i {install} " +
-                                                $"-d '{pluginPath}' ";
+                                                $"-d '{pluginPath}' " +
+                                                $"-s '{Application.streamingAssetsPath}'  ";
 #endif
                 compiler.StartInfo.UseShellExecute = false;
                 compiler.StartInfo.RedirectStandardOutput = true;
