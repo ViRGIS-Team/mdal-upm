@@ -36,7 +36,21 @@ This package is dependent on the following packages having been loaded (and the 
 
 The UPM package is based on the Conda package which has depedencies on other Conda packages but that is not apparent to the user.
 
-## Version numbers 
+## Version numbers
+
+This package is a wrapper around a C++ library. We want to keep the link to the library version. However, we also need to be able to have multiple
+builds of the package for the same underlying library version. Unfortunately, UPM does not have the concept of a build number.
+
+Therefore, this package uses the version number ing proposed by [Favo Yang to solve this](https://medium.com/openupm/how-to-maintain-upm-package-part-3-2d08294269ad#88d8). This adds two digits for build number to the SemVer patch value i.e. 3.1.1 => 3.1.100, 3.1.101, 3.1..102 etc.
+
+This has the unfortunate side effect that 3.1.001 will revert to 3.1.1 and this means :
+
+| Package | Library |
+| ------- | ------- |
+| 3.1.0   | 3.1.0   |
+| 3.1.1   | 3.1.0   |
+| 3.1.100 | 3.1.1.  |
+ 
 
 ## Development and Use in the player
 
@@ -46,7 +60,7 @@ For more details - see the documentation.
 
 The MDAL library is loaded as an unmanaged native plugin. This plugin will load correctly in the player when built. See below for a note about use in the Editor.
 
-This Library works on Windows and Mac based platforms.
+This Library works on Windows, Mac and Linux based platforms.
 
 ## Running in the Editor
 
@@ -66,7 +80,7 @@ This package installs the GDAL package, which copies data for GDAL and for PROJ 
 
 ## Documentation
 
-See [the API Documentation](https://virgis-team.github.io/mdal-upm/).
+See [the API Documentation](https://virgis-team.github.io/mdal-upm/html/index.html).
 
 A typical sample program :
 
