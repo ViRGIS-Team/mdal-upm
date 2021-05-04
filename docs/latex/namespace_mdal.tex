@@ -1,0 +1,118 @@
+\hypertarget{namespace_mdal}{}\doxysection{Mdal Namespace Reference}
+\label{namespace_mdal}\index{Mdal@{Mdal}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_configuration}{Mdal\+Configuration}}
+\begin{DoxyCompactList}\small\item\em Simple \mbox{\hyperlink{class_mdal_1_1_mdal}{Mdal}} Config routine -\/ it really just returns the Version of MDAL \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal}{Mdal}}
+\begin{DoxyCompactList}\small\item\em The basic MDAL Instance Object \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}
+\begin{DoxyCompactList}\small\item\em An Instance of an MDAL \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}}
+\begin{DoxyCompactList}\small\item\em Wrapper object for an MDAL Mesh instance \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_vertex_iterator}{Mdal\+Vertex\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Wrapper for an instance of \href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv424MDAL_MeshVertexIteratorH}{\texttt{ MDAL\+\_\+\+Mesh\+Vertex\+IteratorH }} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_face_iterator}{Mdal\+Face\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Wrapper for an instance of \href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv422MDAL_MeshFaceIteratorH}{\texttt{ MDAL\+\_\+\+Mesh\+Face\+IteratorH}} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_dataset_group}{Mdal\+Dataset\+Group}}
+\begin{DoxyCompactList}\small\item\em Wrapper for an instance of \href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv418MDAL_DatasetGroupH}{\texttt{ MDAL\+\_\+\+Dataset\+GroupH}} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_mdal_1_1_mdal_dataset}{Mdal\+Dataset}}
+\begin{DoxyCompactList}\small\item\em Wrapper for an instance of \href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv413MDAL_DatasetH}{\texttt{ MDAL\+\_\+\+DatasetH}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{MDAL\+\_\+\+Status}} \{ \newline
+{\bfseries None}
+, {\bfseries Err\+\_\+\+Not\+Enough\+Memory}
+, {\bfseries Err\+\_\+\+File\+Not\+Found}
+, {\bfseries Err\+\_\+\+Unknown\+Format}
+, \newline
+{\bfseries Err\+\_\+\+Incompatible\+Mesh}
+, {\bfseries Err\+\_\+\+Invalid\+Data}
+, {\bfseries Err\+\_\+\+Incompatible\+Dataset}
+, {\bfseries Err\+\_\+\+Incompatible\+Dataset\+Group}
+, \newline
+{\bfseries Err\+\_\+\+Missing\+Driver}
+, {\bfseries Err\+\_\+\+Missing\+Driver\+Capability}
+, {\bfseries Err\+\_\+\+Fail\+To\+Write\+To\+Disk}
+, {\bfseries Err\+\_\+\+Unsupported\+Element}
+, \newline
+{\bfseries Warn\+\_\+\+Invalid\+Elements}
+, {\bfseries Warn\+\_\+\+Element\+With\+Invalid\+Node}
+, {\bfseries Warn\+\_\+\+Element\+Not\+Unique}
+, {\bfseries Warn\+\_\+\+Node\+Not\+Unique}
+, \newline
+{\bfseries Warn\+\_\+\+Multiple\+Meshes\+In\+File}
+ \}
+\begin{DoxyCompactList}\small\item\em The Status Codes for MDAL \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{namespace_mdal_a5eed241cc47dcac5fd054df60442c3e6}{MDAL\+\_\+\+Log\+Level}} \{ {\bfseries Error}
+, {\bfseries Warn}
+, {\bfseries Info}
+, {\bfseries Debug}
+ \}
+\begin{DoxyCompactList}\small\item\em MDAL Log Levwlas \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{namespace_mdal_a2a05e68a89ac410680e5602bcfcf89ab}{MDAL\+\_\+\+Data\+Location}} \{ \newline
+{\bfseries Data\+Invalid\+Location}
+, {\bfseries Data\+On\+Vertices}
+, {\bfseries Data\+On\+Faces}
+, {\bfseries Data\+On\+Volumes}
+, \newline
+{\bfseries Data\+On\+Edges}
+ \}
+\begin{DoxyCompactList}\small\item\em Specifies where the data is defined. \end{DoxyCompactList}\item 
+enum class \mbox{\hyperlink{namespace_mdal_a2f99bf2ba1d12f8a0edf06e228d990e6}{MDAL\+\_\+\+Data\+Type}} \{ \newline
+{\bfseries SCALAR\+\_\+\+DOUBLE}
+, {\bfseries VECTOR\+\_\+2\+D\+\_\+\+DOUBLE}
+, {\bfseries ACTIVE\+\_\+\+INTEGER}
+, {\bfseries VERTICAL\+\_\+\+LEVEL\+\_\+\+COUNT\+\_\+\+INTEGER}
+, \newline
+{\bfseries VERTICAL\+\_\+\+LEVEL\+\_\+\+DOUBLE}
+, {\bfseries FACE\+\_\+\+INDEX\+\_\+\+TO\+\_\+\+VOLUME\+\_\+\+INDEX\+\_\+\+INTEGER}
+, {\bfseries SCALAR\+\_\+\+VOLUMES\+\_\+\+DOUBLE}
+, {\bfseries VECTOR\+\_\+2\+D\+\_\+\+VOLUMES\+\_\+\+DOUBLE}
+ \}
+\begin{DoxyCompactList}\small\item\em Data type to be returned by MDAL\+\_\+\+D\+\_\+data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_mdal_a2a05e68a89ac410680e5602bcfcf89ab}\label{namespace_mdal_a2a05e68a89ac410680e5602bcfcf89ab}} 
+\index{Mdal@{Mdal}!MDAL\_DataLocation@{MDAL\_DataLocation}}
+\index{MDAL\_DataLocation@{MDAL\_DataLocation}!Mdal@{Mdal}}
+\doxysubsubsection{\texorpdfstring{MDAL\_DataLocation}{MDAL\_DataLocation}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_mdal_a2a05e68a89ac410680e5602bcfcf89ab}{Mdal.\+MDAL\+\_\+\+Data\+Location}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Specifies where the data is defined. 
+
+\mbox{\Hypertarget{namespace_mdal_a2f99bf2ba1d12f8a0edf06e228d990e6}\label{namespace_mdal_a2f99bf2ba1d12f8a0edf06e228d990e6}} 
+\index{Mdal@{Mdal}!MDAL\_DataType@{MDAL\_DataType}}
+\index{MDAL\_DataType@{MDAL\_DataType}!Mdal@{Mdal}}
+\doxysubsubsection{\texorpdfstring{MDAL\_DataType}{MDAL\_DataType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_mdal_a2f99bf2ba1d12f8a0edf06e228d990e6}{Mdal.\+MDAL\+\_\+\+Data\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Data type to be returned by MDAL\+\_\+\+D\+\_\+data. 
+
+\mbox{\Hypertarget{namespace_mdal_a5eed241cc47dcac5fd054df60442c3e6}\label{namespace_mdal_a5eed241cc47dcac5fd054df60442c3e6}} 
+\index{Mdal@{Mdal}!MDAL\_LogLevel@{MDAL\_LogLevel}}
+\index{MDAL\_LogLevel@{MDAL\_LogLevel}!Mdal@{Mdal}}
+\doxysubsubsection{\texorpdfstring{MDAL\_LogLevel}{MDAL\_LogLevel}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_mdal_a5eed241cc47dcac5fd054df60442c3e6}{Mdal.\+MDAL\+\_\+\+Log\+Level}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+MDAL Log Levwlas 
+
+\mbox{\Hypertarget{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}\label{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}} 
+\index{Mdal@{Mdal}!MDAL\_Status@{MDAL\_Status}}
+\index{MDAL\_Status@{MDAL\_Status}!Mdal@{Mdal}}
+\doxysubsubsection{\texorpdfstring{MDAL\_Status}{MDAL\_Status}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{Mdal.\+MDAL\+\_\+\+Status}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The Status Codes for MDAL 
+

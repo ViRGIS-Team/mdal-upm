@@ -1,0 +1,158 @@
+\hypertarget{class_mdal_1_1_mdal}{}\doxysection{Mdal.\+Mdal Class Reference}
+\label{class_mdal_1_1_mdal}\index{Mdal.Mdal@{Mdal.Mdal}}
+
+
+The basic MDAL Instance Object  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a84c2ae9afb7e1f9dd6dee098647ee47c}\label{class_mdal_1_1_mdal_a84c2ae9afb7e1f9dd6dee098647ee47c}} 
+static \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} {\bfseries MDAL\+\_\+\+Load\+Mesh} (\mbox{[}Marshal\+As(Unmanaged\+Type.\+LPStr)\mbox{]} String\+Builder uri)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a06e7b609b17f938da6778cf49b60f418}\label{class_mdal_1_1_mdal_a06e7b609b17f938da6778cf49b60f418}} 
+static int {\bfseries MDAL\+\_\+\+M\+\_\+vertex\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a50ddac89dedfe5a8c5b2e12518c2eee0}\label{class_mdal_1_1_mdal_a50ddac89dedfe5a8c5b2e12518c2eee0}} 
+static int {\bfseries MDAL\+\_\+\+M\+\_\+edge\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a1273496de4623621762cbd25977729e9}\label{class_mdal_1_1_mdal_a1273496de4623621762cbd25977729e9}} 
+static int {\bfseries MDAL\+\_\+\+M\+\_\+face\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a2f7b8b9623fc545d268b36538d386160}\label{class_mdal_1_1_mdal_a2f7b8b9623fc545d268b36538d386160}} 
+static int {\bfseries MDAL\+\_\+\+M\+\_\+dataset\+Group\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_ad930d8a5b07bef216ee1de52d805bdc3}\label{class_mdal_1_1_mdal_ad930d8a5b07bef216ee1de52d805bdc3}} 
+static \mbox{\hyperlink{class_mdal_1_1_mdal_vertex_iterator}{Mdal\+Vertex\+Iterator}} {\bfseries MDAL\+\_\+\+M\+\_\+vertex\+Iterator} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a92220bd57b0e0910b0f1efbcda778f58}\label{class_mdal_1_1_mdal_a92220bd57b0e0910b0f1efbcda778f58}} 
+static int {\bfseries MDAL\+\_\+\+VI\+\_\+next} (\mbox{\hyperlink{class_mdal_1_1_mdal_vertex_iterator}{Mdal\+Vertex\+Iterator}} pointer, int vertices\+Count, double\mbox{[}$\,$\mbox{]} coordinates)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a5153d6fe7a817e25e8db80400ef16850}\label{class_mdal_1_1_mdal_a5153d6fe7a817e25e8db80400ef16850}} 
+static void {\bfseries MDAL\+\_\+\+VI\+\_\+close} (\mbox{\hyperlink{class_mdal_1_1_mdal_vertex_iterator}{Mdal\+Vertex\+Iterator}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_adb9ec16824b60c9595ebe77132b96e28}\label{class_mdal_1_1_mdal_adb9ec16824b60c9595ebe77132b96e28}} 
+static \mbox{\hyperlink{class_mdal_1_1_mdal_face_iterator}{Mdal\+Face\+Iterator}} {\bfseries MDAL\+\_\+\+M\+\_\+face\+Iterator} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a3ce41ba48e6a557d92b012dbbbb6bf5c}\label{class_mdal_1_1_mdal_a3ce41ba48e6a557d92b012dbbbb6bf5c}} 
+static int {\bfseries MDAL\+\_\+\+FI\+\_\+next} (\mbox{\hyperlink{class_mdal_1_1_mdal_face_iterator}{Mdal\+Face\+Iterator}} iterator, int face\+Offsets\+Buffer\+Len,\mbox{[}Marshal\+As(Unmanaged\+Type.\+LPArray, Size\+Param\+Index=1)\mbox{]} int\mbox{[}$\,$\mbox{]} face\+Offsets\+Buffer, int vertex\+Indices\+Buffer\+Len, \mbox{[}Marshal\+As(Unmanaged\+Type.\+LPArray, Size\+Param\+Index=3)\mbox{]} int\mbox{[}$\,$\mbox{]} vertex\+Indices\+Buffer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_aecc772b6490034b3002501f5c3a4b150}\label{class_mdal_1_1_mdal_aecc772b6490034b3002501f5c3a4b150}} 
+static void {\bfseries MDAL\+\_\+\+FI\+\_\+close} (\mbox{\hyperlink{class_mdal_1_1_mdal_face_iterator}{Mdal\+Face\+Iterator}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_ad2e31d3405ad995644017fd94b3fa73e}\label{class_mdal_1_1_mdal_ad2e31d3405ad995644017fd94b3fa73e}} 
+static int {\bfseries MDAL\+\_\+\+M\+\_\+face\+Vertices\+Maximum\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_af9bfaa8fcaed4b4880d747b843b22124}\label{class_mdal_1_1_mdal_af9bfaa8fcaed4b4880d747b843b22124}} 
+static \mbox{\hyperlink{class_mdal_1_1_mdal_dataset_group}{Mdal\+Dataset\+Group}} {\bfseries MDAL\+\_\+\+M\+\_\+dataset\+Group} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer, int index)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_ae5c285ec715dc63836ac178c53a66113}\label{class_mdal_1_1_mdal_ae5c285ec715dc63836ac178c53a66113}} 
+static Int\+Ptr {\bfseries MDAL\+\_\+\+G\+\_\+name} (\mbox{\hyperlink{class_mdal_1_1_mdal_dataset_group}{Mdal\+Dataset\+Group}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a02ee82473af5e8b526c8b956b8d72b43}\label{class_mdal_1_1_mdal_a02ee82473af5e8b526c8b956b8d72b43}} 
+static int {\bfseries MDAL\+\_\+\+G\+\_\+dataset\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_dataset_group}{Mdal\+Dataset\+Group}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a4d7c710aa554d74d6adc7c225f19d7cd}\label{class_mdal_1_1_mdal_a4d7c710aa554d74d6adc7c225f19d7cd}} 
+static \mbox{\hyperlink{class_mdal_1_1_mdal_dataset}{Mdal\+Dataset}} {\bfseries MDAL\+\_\+\+G\+\_\+dataset} (\mbox{\hyperlink{class_mdal_1_1_mdal_dataset_group}{Mdal\+Dataset\+Group}} pointer, int index)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_ad7e9e39038c60de9a369dee5af90cac0}\label{class_mdal_1_1_mdal_ad7e9e39038c60de9a369dee5af90cac0}} 
+static int {\bfseries MDAL\+\_\+\+D\+\_\+value\+Count} (\mbox{\hyperlink{class_mdal_1_1_mdal_dataset}{Mdal\+Dataset}} pointer)
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_mdal_ad63be54cb32a775e0fc50e5ffa1c313c}\label{class_mdal_1_1_mdal_ad63be54cb32a775e0fc50e5ffa1c313c}} 
+static int {\bfseries MDAL\+\_\+\+D\+\_\+data} (\mbox{\hyperlink{class_mdal_1_1_mdal_dataset}{Mdal\+Dataset}} pointer, int start, int count, \mbox{\hyperlink{namespace_mdal_a2f99bf2ba1d12f8a0edf06e228d990e6}{MDAL\+\_\+\+Data\+Type}} type, double\mbox{[}$\,$\mbox{]} values)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static string \mbox{\hyperlink{class_mdal_1_1_mdal_a9a6dca3b8cd0088065b71496b285d93c}{Get\+Version}} ()
+\begin{DoxyCompactList}\small\item\em Get the MDAL version string \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{MDAL\+\_\+\+Status}} \mbox{\hyperlink{class_mdal_1_1_mdal_a5fcba21fa2221a7d93dd41b771aec3b3}{Last\+Status}} ()
+\begin{DoxyCompactList}\small\item\em Get the status message for the last call on MDAL \end{DoxyCompactList}\item 
+static string \mbox{\hyperlink{class_mdal_1_1_mdal_a5dd107e49b8f109629dc4f8e78d9a09d}{Get\+Names}} (string uri)
+\begin{DoxyCompactList}\small\item\em Gets the mesh names as URIs \end{DoxyCompactList}\item 
+static string \mbox{\hyperlink{class_mdal_1_1_mdal_adde221b33309ecefca0af0eb29c24e03}{Get\+CRS}} (\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} pointer)
+\begin{DoxyCompactList}\small\item\em Get the CRS string for a Mesh \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The basic MDAL Instance Object 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mdal_1_1_mdal_adde221b33309ecefca0af0eb29c24e03}\label{class_mdal_1_1_mdal_adde221b33309ecefca0af0eb29c24e03}} 
+\index{Mdal.Mdal@{Mdal.Mdal}!GetCRS@{GetCRS}}
+\index{GetCRS@{GetCRS}!Mdal.Mdal@{Mdal.Mdal}}
+\doxysubsubsection{\texorpdfstring{GetCRS()}{GetCRS()}}
+{\footnotesize\ttfamily static string Mdal.\+Mdal.\+Get\+CRS (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}}}]{pointer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the CRS string for a Mesh 
+
+\href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv417MDAL_M_projection10MDAL_MeshH}{\texttt{ Implements MDAL\+\_\+\+M\+\_\+projection}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em pointer} & \mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{MDAL\+\_\+\+Status}} Pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string The CRS string
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a5dd107e49b8f109629dc4f8e78d9a09d}\label{class_mdal_1_1_mdal_a5dd107e49b8f109629dc4f8e78d9a09d}} 
+\index{Mdal.Mdal@{Mdal.Mdal}!GetNames@{GetNames}}
+\index{GetNames@{GetNames}!Mdal.Mdal@{Mdal.Mdal}}
+\doxysubsubsection{\texorpdfstring{GetNames()}{GetNames()}}
+{\footnotesize\ttfamily static string Mdal.\+Mdal.\+Get\+Names (\begin{DoxyParamCaption}\item[{string}]{uri }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Gets the mesh names as URIs 
+
+\href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv414MDAL_MeshNamesPKc}{\texttt{ Implements MDAL\+\_\+\+Mesh\+Names}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em uri} & string The URI for \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a string containing a list of URIs separated by ;;
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a9a6dca3b8cd0088065b71496b285d93c}\label{class_mdal_1_1_mdal_a9a6dca3b8cd0088065b71496b285d93c}} 
+\index{Mdal.Mdal@{Mdal.Mdal}!GetVersion@{GetVersion}}
+\index{GetVersion@{GetVersion}!Mdal.Mdal@{Mdal.Mdal}}
+\doxysubsubsection{\texorpdfstring{GetVersion()}{GetVersion()}}
+{\footnotesize\ttfamily static string Mdal.\+Mdal.\+Get\+Version (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the MDAL version string 
+
+\href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv412MDAL_Versionv}{\texttt{ Implements MDAL\+\_\+\+Version()}}
+
+\begin{DoxyReturn}{Returns}
+string MDAL version string
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_mdal_a5fcba21fa2221a7d93dd41b771aec3b3}\label{class_mdal_1_1_mdal_a5fcba21fa2221a7d93dd41b771aec3b3}} 
+\index{Mdal.Mdal@{Mdal.Mdal}!LastStatus@{LastStatus}}
+\index{LastStatus@{LastStatus}!Mdal.Mdal@{Mdal.Mdal}}
+\doxysubsubsection{\texorpdfstring{LastStatus()}{LastStatus()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{MDAL\+\_\+\+Status}} Mdal.\+Mdal.\+Last\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Get the status message for the last call on MDAL 
+
+\href{https://www.mdal.xyz/api/mdal_c_api.html\#_CPPv415MDAL_LastStatusv}{\texttt{ Implements MDAL\+\_\+\+Last\+Status}}
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{namespace_mdal_af99fce4a6528677bc03a31ecaf9e0a5f}{MDAL\+\_\+\+Status}}Status 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/paulharwood/runette/mdal-\/upm/\+Runtime/\+Scripts/Mdal.\+cs\end{DoxyCompactItemize}

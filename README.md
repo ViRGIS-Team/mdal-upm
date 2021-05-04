@@ -32,9 +32,11 @@ The Package can also be installed using the Unity Package Manager directly from 
 
 This package is dependent on the following packages having been loaded (and the UPM / GH combination does not allow package dependencies  - so you have to do that yourself) :
 
-- Geometry3Sharp -[UPM GH Repo](https://github.com/ViRGIS-Team/geometry3Sharp). This providse the Mesh data strcuture and manipulation tools in c#, and
+- Geometry3Sharp -[UPM GH Repo](https://github.com/ViRGIS-Team/geometry3Sharp). This providse the Mesh data strcuture and manipulation tools in c#
 
-- GDAL - [UPM GH repo](https://github.com/ViRGIS-Team/gdal-upm).
+The UPM package is based on the Conda package which has depedencies on other Conda packages but that is not apparent to the user.
+
+## Version numbers 
 
 ## Development and Use in the player
 
@@ -56,9 +58,11 @@ For this package to work , the development machine MUST have a working copy of C
 conda info
 ```
 
+If the Editor is running on Windows, there must also be a reasonably recent vesion of Powershell installed.
+
 The package will keep the installation of Mdal in `Assets\Conda`. You may want to exclude this folder from source control.
 
-This package installs the GDAL package, which copies data for GDAL and for PROJ into the `Assets/StreamingAssets`folder. You may also want to exclude this folder from source control.
+This package installs the GDAL package, which copies data for GDAL and for PROJ into the `Assets/StreamingAssets`folder. You may also want to exclude the sub-folders GDAL and PROJ from source control.
 
 ## Documentation
 

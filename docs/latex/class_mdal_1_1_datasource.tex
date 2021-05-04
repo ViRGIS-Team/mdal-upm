@@ -1,0 +1,115 @@
+\hypertarget{class_mdal_1_1_datasource}{}\doxysection{Mdal.\+Datasource Class Reference}
+\label{class_mdal_1_1_datasource}\index{Mdal.Datasource@{Mdal.Datasource}}
+
+
+An Instance of an MDAL \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_datasource_ad259fc6076415697c82104b5514fd230}\label{class_mdal_1_1_datasource_ad259fc6076415697c82104b5514fd230}} 
+{\bfseries Datasource} (string uri)
+\item 
+\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} \mbox{\hyperlink{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}{Get\+Mesh}} (int index)
+\begin{DoxyCompactList}\small\item\em Get a \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} object from the \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} \end{DoxyCompactList}\item 
+Task$<$ \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} $>$ \mbox{\hyperlink{class_mdal_1_1_datasource_ac21b7609619b0d85a35c824d04e1367c}{Get\+Mesh\+Async}} (int index)
+\begin{DoxyCompactList}\small\item\em Returns a Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}{Datasource.\+Get\+Mesh(int)}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} \mbox{\hyperlink{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}{Load}} (string uri)
+\begin{DoxyCompactList}\small\item\em Create a \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} from a Uri -\/ e.\+g. filename \end{DoxyCompactList}\item 
+static Task$<$ \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} $>$ \mbox{\hyperlink{class_mdal_1_1_datasource_a573d0d200a27a8cb6af18ef3dc1eb737}{Load\+Async}} (string uri)
+\begin{DoxyCompactList}\small\item\em Returns a Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}{Datasource.\+Load(string)}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_mdal_1_1_datasource_af91f8b46372e6e8ad4fb4ad2318686f1}\label{class_mdal_1_1_datasource_af91f8b46372e6e8ad4fb4ad2318686f1}} 
+string\mbox{[}$\,$\mbox{]} {\bfseries meshes}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An Instance of an MDAL \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}\label{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}} 
+\index{Mdal.Datasource@{Mdal.Datasource}!GetMesh@{GetMesh}}
+\index{GetMesh@{GetMesh}!Mdal.Datasource@{Mdal.Datasource}}
+\doxysubsubsection{\texorpdfstring{GetMesh()}{GetMesh()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} Mdal.\+Datasource.\+Get\+Mesh (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a \mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}} object from the \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int Index of the Mesh in the \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}}
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_datasource_ac21b7609619b0d85a35c824d04e1367c}\label{class_mdal_1_1_datasource_ac21b7609619b0d85a35c824d04e1367c}} 
+\index{Mdal.Datasource@{Mdal.Datasource}!GetMeshAsync@{GetMeshAsync}}
+\index{GetMeshAsync@{GetMeshAsync}!Mdal.Datasource@{Mdal.Datasource}}
+\doxysubsubsection{\texorpdfstring{GetMeshAsync()}{GetMeshAsync()}}
+{\footnotesize\ttfamily Task$<$\mbox{\hyperlink{class_mdal_1_1_mdal_mesh}{Mdal\+Mesh}}$>$ Mdal.\+Datasource.\+Get\+Mesh\+Async (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns a Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}{Datasource.\+Get\+Mesh(int)}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int Index of the Mesh in the \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a5931410300e9da1223f7fdfdbe17af95}{Datasource.\+Get\+Mesh(int)}}
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}\label{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}} 
+\index{Mdal.Datasource@{Mdal.Datasource}!Load@{Load}}
+\index{Load@{Load}!Mdal.Datasource@{Mdal.Datasource}}
+\doxysubsubsection{\texorpdfstring{Load()}{Load()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} Mdal.\+Datasource.\+Load (\begin{DoxyParamCaption}\item[{string}]{uri }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Create a \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} from a Uri -\/ e.\+g. filename 
+
+
+\begin{DoxyParams}{Parameters}
+{\em uri} & string \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} uri \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_mdal_1_1_datasource_a573d0d200a27a8cb6af18ef3dc1eb737}\label{class_mdal_1_1_datasource_a573d0d200a27a8cb6af18ef3dc1eb737}} 
+\index{Mdal.Datasource@{Mdal.Datasource}!LoadAsync@{LoadAsync}}
+\index{LoadAsync@{LoadAsync}!Mdal.Datasource@{Mdal.Datasource}}
+\doxysubsubsection{\texorpdfstring{LoadAsync()}{LoadAsync()}}
+{\footnotesize\ttfamily static Task$<$\mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}}$>$ Mdal.\+Datasource.\+Load\+Async (\begin{DoxyParamCaption}\item[{string}]{uri }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns a Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}{Datasource.\+Load(string)}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em uri} & string \mbox{\hyperlink{class_mdal_1_1_datasource}{Datasource}} uri \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Task running \mbox{\hyperlink{class_mdal_1_1_datasource_a64ce201a119d8309bcf8a5898cd58434}{Datasource.\+Load(string)}} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+Users/paulharwood/runette/mdal-\/upm/\+Runtime/\+Scripts/Mdal.\+cs\end{DoxyCompactItemize}

@@ -33,7 +33,7 @@ namespace Mdal {
         /// <summary>
         /// Get the MDAL version string
         ///
-        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv412MDAL_Versionv">Implements MDAL_Version()</See>
+        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv412MDAL_Versionv">Implements MDAL_Version()</a>
         /// </summary>
         /// <returns> <see cref="string" /> MDAL version string</returns>
         public static string GetVersion() {
@@ -191,10 +191,10 @@ namespace Mdal {
         }
 
         /// <summary>
-        /// Get a <see cref="MdalMesh" object from the <see cref="Datasource"
+        /// Get a <see cref="MdalMesh" /> object from the <see cref="Datasource" />
         /// </summary>
-        /// <param name="index"><see cref="int"/>Index of the Mesh in the Datasource</param>
-        /// <returns><see cref="MdalMesh""</returns>
+        /// <param name="index"><see cref="int" /> Index of the Mesh in the Datasource</param>
+        /// <returns><see cref="MdalMesh" /></returns>
         public MdalMesh GetMesh(int index) {
             StringBuilder stb = new StringBuilder(meshes[index]);
             return Mdal.MDAL_LoadMesh(stb);
@@ -203,7 +203,7 @@ namespace Mdal {
         /// <summary>
         /// Returns a <see cref="Task" /> running <see cref="Datasource.GetMesh(int)" />
         /// </summary>
-        /// <param name="index"><see cref="int"/>Index of the Mesh in the Datasource</param>
+        /// <param name="index"><see cref="int"/> Index of the Mesh in the Datasource</param>
         /// <returns><see cref="Task" /> running <see cref="Datasource.GetMesh(int)" /></returns>
         public Task<MdalMesh> GetMeshAsync(int index)
         {
@@ -218,6 +218,9 @@ namespace Mdal {
 
     /// <summary>
     /// Wrapper object for an MDAL Mesh instance
+    ///
+    /// MdalMesh will implictly cast into either <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">Simplemesh</a>
+    /// or <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a>
     /// </summary>
     public sealed class MdalMesh : SafeHandleZeroOrMinusOneIsInvalid {
 
@@ -229,12 +232,6 @@ namespace Mdal {
             return true;
         }
 
-        /// <summary>
-        /// Returns the mesh as a <see cref="SimpleMesh"/>
-        ///
-        /// <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">g3.SimpleMesh API</a>
-        /// </summary>
-        /// <returns><see cref="SimpleMesh"/></returns>
         private SimpleMesh ToMesh() {
             int vcount = Mdal.MDAL_M_vertexCount(this);
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(this);
@@ -250,12 +247,6 @@ namespace Mdal {
             return mesh;
         }
 
-        /// <summary>
-        /// Gets the colors from the mesh
-        /// </summary>
-        /// <param name="count"><see cref="int"/>Number of vertices in the mesh</param>
-        /// <param name="hasColors"><see cref="bool"/>returns true if the mesh has colors</param>
-        /// <returns></returns>
         VectorArray3f GetColors(int count, out bool hasColors) {
             hasColors = false;
             int dgCount = Mdal.MDAL_M_datasetGroupCount(this);
@@ -296,10 +287,24 @@ namespace Mdal {
             return mesh;
         }
 
+        /// <summary>
+        /// Returns the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">Simplemesh</a>
+        ///
+        /// </summary>
+        /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">Simplemesh</a></returns>
         public static implicit operator SimpleMesh(MdalMesh thisMesh) => thisMesh.ToMesh();
+
+        /// <summary>
+        /// Returns the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a>
+        ///
+        /// </summary>
+        /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a></returns>
         public static implicit operator DMesh3(MdalMesh thisMesh) => thisMesh.ToDMesh();
     }
 
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv424MDAL_MeshVertexIteratorH"> MDAL_MeshVertexIteratorH </a>
+    /// </summary>
     public sealed class MdalVertexIterator : SafeHandleZeroOrMinusOneIsInvalid {
         
         public MdalVertexIterator() : base (ownsHandle: true) {
@@ -311,6 +316,11 @@ namespace Mdal {
             return Mdal.LastStatus() == 0;
         }
 
+        /// <summary>
+        /// Get the verteces of the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3d.html">VectorArray3d</a>
+        /// </summary>
+        /// <param name="count"><see cref="int"/> int number of verteces to fetch</param>
+        /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3d.html">VectorArray3d</a></returns>
         public VectorArray3d GetVertexes(int count) {
             double[] vertexes = new double[count * 3];
             Mdal.MDAL_VI_next(this, count, vertexes);
@@ -318,6 +328,9 @@ namespace Mdal {
         }
     }
 
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv422MDAL_MeshFaceIteratorH">MDAL_MeshFaceIteratorH</a>
+    /// </summary>
     public sealed class MdalFaceIterator : SafeHandleZeroOrMinusOneIsInvalid {
 
         public MdalFaceIterator() : base(ownsHandle: true) {
@@ -329,6 +342,13 @@ namespace Mdal {
             return Mdal.LastStatus() == 0;
         }
 
+        /// <summary>
+        /// Get the faces of the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.IndexArray3i.html">IndexArray3i</a>
+        /// </summary>
+        /// <remarks> This method can currently only process meshes of trinagles or quads</remarks>
+        /// <param name="count"><see cref="int"> Number of faces to fetch </param>
+        /// <param name="faceSize"><see cref="int"/> Largest Face size</param>
+        /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.IndexArray3i.html">IndexArray3i</a></returns>
         public IndexArray3i GetFaces(int count, int faceSize) {
             if (faceSize > 4)
                 throw new NotSupportedException("Only Tri and Quad Meshes supported");
@@ -357,6 +377,9 @@ namespace Mdal {
         }
     }
 
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv418MDAL_DatasetGroupH">MDAL_DatasetGroupH</a>
+    /// </summary>
     public sealed class MdalDatasetGroup : SafeHandleZeroOrMinusOneIsInvalid {
         public List<MdalDataset> datasets = new List<MdalDataset>();
 
@@ -368,11 +391,23 @@ namespace Mdal {
             return true;
         }
 
+        /// <summary>
+        /// Returns the DatasetGroup Name
+        ///
+        /// Implements <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv411MDAL_G_name18MDAL_DatasetGroupH">MDAL_G_name</a>
+        /// </summary>
+        /// <returns><see cref="string"/> name</returns>
         public string GetName() {
             IntPtr ret = Mdal.MDAL_G_name(this);
             return Marshal.PtrToStringAnsi(ret);
         }
 
+        /// <summary>
+        /// Fetches the member <see cref="MdalDataset" />s from the Group and stores them
+        /// in the <see cref="MdalDatasetGroup.datasets"/> member
+        ///
+        /// Implements <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv414MDAL_G_dataset18MDAL_DatasetGroupHi">MDAL_G_dataset</a>
+        /// </summary>
         public void GetDatasets() {
             int count = Mdal.MDAL_G_datasetCount(this);
             for (int i = 0; i < count; i++) {
@@ -382,6 +417,9 @@ namespace Mdal {
 
     }
 
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv413MDAL_DatasetH">MDAL_DatasetH</a>
+    /// </summary>
     public sealed class MdalDataset : SafeHandleZeroOrMinusOneIsInvalid {
 
         public MdalDataset() : base(ownsHandle: true) {
@@ -392,6 +430,12 @@ namespace Mdal {
             return true;
         }
 
+        /// <summary>
+        /// Returns the values in the <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv413MDAL_DatasetH">MDAL_DatasetH</a>
+        ///
+        /// Implements <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv411MDAL_D_data13MDAL_DatasetHii13MDAL_DataTypePv">MDAL_D_data</a>
+        /// </summary>
+        /// <param name="values"> Array to put the values in</param>
         public void GetValues(ref double[] values) {
             if (values.Length != Mdal.MDAL_D_valueCount(this))
                 return;
@@ -403,7 +447,7 @@ namespace Mdal {
     }
 
     /// <summary>
-    /// 
+    /// The Status Codes for MDAL
     /// </summary>
     public enum MDAL_Status {
         None,
@@ -425,6 +469,9 @@ namespace Mdal {
         Warn_MultipleMeshesInFile,
     }
 
+    /// <summary>
+    /// MDAL Log Levwlas
+    /// </summary>
     public enum MDAL_LogLevel {
         Error,
         Warn,
