@@ -66,4 +66,34 @@ This package installs the GDAL package, which copies data for GDAL and for PROJ 
 
 ## Documentation
 
-TBD
+See [the API Documentation](https://virgis-team.github.io/mdal-upm/).
+
+A typical sample program :
+
+```c#
+using Mdal;
+using g3;
+
+  List<DMehs3> features = new List<DMesh3>();
+
+  // for MDAL files - load the mesh directly
+  ds = Datasource.Load("...SourceFileName");
+
+  for (int i = 0; i < ds.meshes.Length; i++) {
+      DMesh3 mesh = ds.GetMesh(i);
+      mesh.RemoveMetadata("properties");
+      mesh.AttachMetadata("properties", new Dictionary<string, object>{
+      { "Name", ds.meshes[i] }
+  });
+      // set the CRS based on what is known
+      if (proj != null) {
+          mesh.RemoveMetadata("CRS");
+          mesh.AttachMetadata("CRS", proj);
+      }
+      if (layer.ContainsKey("Crs") && layer.Crs != null) {
+          mesh.RemoveMetadata("CRS");
+          mesh.AttachMetadata("CRS", layer.Crs);
+      };
+      features.Add(mesh);
+  }
+```
