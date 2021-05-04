@@ -5,17 +5,24 @@ using System.Threading.Tasks;
 using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
-using UnityEngine;
+
 
 namespace Mdal {
 
+    /// <summary>
+    /// Simple Mdal Config routine - it really just returns the Version of MDAL
+    ///
+    /// The real use is that if there is a DLL error - this call will trigger it.
+    /// </summary>
     public class MdalConfiguration{
-        public static void ConfigureMdal() {
-            Debug.Log("Mdal Version " + Mdal.GetVersion());
+        public static string ConfigureMdal() {
+            return Mdal.GetVersion();
         }
     }
 
-
+    /// <summary>
+    /// The basic MDAL Instance Object
+    /// </summary>
     public class Mdal {
 
         private const string MDAL_LIBRARY = "mdal";
@@ -23,6 +30,12 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_Version")]
         private static extern IntPtr MDAL_Version();
 
+        /// <summary>
+        /// Get the MDAL version string
+        ///
+        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv412MDAL_Versionv">Implements MDAL_Version()</See>
+        /// </summary>
+        /// <returns> <see cref="string" /> MDAL version string</returns>
         public static string GetVersion() {
             IntPtr ret = MDAL_Version();
             string version = Marshal.PtrToStringAnsi(ret);
@@ -32,6 +45,12 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_LastStatus")]
         private static extern int MDAL_lastStatus();
 
+        /// <summary>
+        /// Get the status message for the last call on MDAL
+        ///
+        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv415MDAL_LastStatusv">Implements MDAL_LastStatus</a>
+        /// </summary>
+        /// <returns cref="MDAL_Status"> <see cref="MDAL_Status" />Status </returns>
         public static MDAL_Status LastStatus() {
             int ret = MDAL_lastStatus();
             return (MDAL_Status) ret;
@@ -43,6 +62,13 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_MeshNames")]
         private static extern IntPtr MDAL_MeshNames([MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
 
+        /// <summary>
+        /// Gets the mesh names as URIs
+        ///
+        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv414MDAL_MeshNamesPKc">Implements MDAL_MeshNames</a>
+        /// </summary>
+        /// <param name="uri"> <see cref="string" /> The URI for Datasource</param>
+        /// <returns>a <see cref ="string" /> containing a list of URIs separated by ;;</returns>
         public static string GetNames(string uri) {
             StringBuilder stb = new StringBuilder(uri);
             IntPtr ret = MDAL_MeshNames(stb);
@@ -64,6 +90,14 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_projection")]
         private static extern IntPtr MDAL_M_projection(MdalMesh pointer);
 
+
+        /// <summary>
+        /// Get the CRS string for a Mesh
+        ///
+        /// <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv417MDAL_M_projection10MDAL_MeshH">Implements MDAL_M_projection</a>
+        /// </summary>
+        /// <param name="pointer"><see cref="MDAL_Status" /> Pointer</param>
+        /// <returns> <see cref="string" /> The CRS string</returns>
         public static string GetCRS(MdalMesh pointer) {
             IntPtr ret = MDAL_M_projection(pointer);
             string proj = Marshal.PtrToStringAnsi(ret);
@@ -112,11 +146,11 @@ namespace Mdal {
 
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_D_data")]
         public static extern int MDAL_D_data(MdalDataset pointer, int start, int count, MDAL_DataType type, double[] values);
-
-
-
     }
 
+    /// <summary>
+    /// An Instance of an MDAL Datasource
+    /// </summary>
     public class Datasource {
         string uri;
         public string[] meshes;
@@ -125,6 +159,11 @@ namespace Mdal {
             this.uri = uri;
         }
 
+        /// <summary>
+        /// Create a Datasource from a Uri - e.g. filename
+        /// </summary>
+        /// <param name="uri"><see cref="string" /> Datasource uri </param>
+        /// <returns><see cref="Datasource" /></returns>
         public static Datasource Load(string uri)
         {
             Datasource ds = new Datasource(uri);
@@ -136,6 +175,11 @@ namespace Mdal {
             return ds;
         }
 
+        /// <summary>
+        /// Returns a <see cref="Task" /> running <see cref="Datasource.Load(string)" />
+        /// </summary>
+        /// <param name="uri"><see cref="string" /> Datasource uri </param>
+        /// <returns><see cref="Task" /> running <see cref="Datasource.Load(string)" /> </returns>
         public static Task<Datasource> LoadAsync(string uri)
         {
             Task<Datasource> t1 = new Task<Datasource>(() =>
@@ -146,11 +190,21 @@ namespace Mdal {
             return t1;
         }
 
+        /// <summary>
+        /// Get a <see cref="MdalMesh" object from the <see cref="Datasource"
+        /// </summary>
+        /// <param name="index"><see cref="int"/>Index of the Mesh in the Datasource</param>
+        /// <returns><see cref="MdalMesh""</returns>
         public MdalMesh GetMesh(int index) {
             StringBuilder stb = new StringBuilder(meshes[index]);
             return Mdal.MDAL_LoadMesh(stb);
         }
 
+        /// <summary>
+        /// Returns a <see cref="Task" /> running <see cref="Datasource.GetMesh(int)" />
+        /// </summary>
+        /// <param name="index"><see cref="int"/>Index of the Mesh in the Datasource</param>
+        /// <returns><see cref="Task" /> running <see cref="Datasource.GetMesh(int)" /></returns>
         public Task<MdalMesh> GetMeshAsync(int index)
         {
             Task<MdalMesh> t1 = new Task<MdalMesh>(() => {
@@ -162,6 +216,9 @@ namespace Mdal {
 
     }
 
+    /// <summary>
+    /// Wrapper object for an MDAL Mesh instance
+    /// </summary>
     public sealed class MdalMesh : SafeHandleZeroOrMinusOneIsInvalid {
 
         public MdalMesh() : base(ownsHandle: true) {
@@ -172,6 +229,12 @@ namespace Mdal {
             return true;
         }
 
+        /// <summary>
+        /// Returns the mesh as a <see cref="SimpleMesh"/>
+        ///
+        /// <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">g3.SimpleMesh API</a>
+        /// </summary>
+        /// <returns><see cref="SimpleMesh"/></returns>
         private SimpleMesh ToMesh() {
             int vcount = Mdal.MDAL_M_vertexCount(this);
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(this);
@@ -187,6 +250,12 @@ namespace Mdal {
             return mesh;
         }
 
+        /// <summary>
+        /// Gets the colors from the mesh
+        /// </summary>
+        /// <param name="count"><see cref="int"/>Number of vertices in the mesh</param>
+        /// <param name="hasColors"><see cref="bool"/>returns true if the mesh has colors</param>
+        /// <returns></returns>
         VectorArray3f GetColors(int count, out bool hasColors) {
             hasColors = false;
             int dgCount = Mdal.MDAL_M_datasetGroupCount(this);
@@ -333,7 +402,9 @@ namespace Mdal {
 
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public enum MDAL_Status {
         None,
         Err_NotEnoughMemory,
