@@ -50,7 +50,6 @@ namespace Mdal {
             path = Path.Combine(path, "install_script.sh");
 #endif
             string response = Conda.Conda.Install($"mdal={packageVersion}", path);
-            Debug.Log(response);
         }
     }
 }
