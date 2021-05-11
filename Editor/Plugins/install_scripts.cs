@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Diagnostics;
-using System;
 using Debug = UnityEngine.Debug;
 
 #if UNITY_EDITOR
@@ -10,18 +9,7 @@ namespace Mdal {
 
     public class Install{
 
-#if UNITY_EDITOR_WIN
-        const string test = "mdalinfo.exe";
-#elif UNITY_EDITOR_OSX
-        const string test = "mdalinfo";
-        const string basharg = "-l";
-#elif UNITY_EDITOR_LINUX
-        const string test = "mdalinfo";
-        const string basharg = "-i";
-#endif 
- 
         const string packageVersion = "0.8.0";
-
 
         [InitializeOnLoadMethod]
         static void OnProjectLoadedinEditor()
@@ -34,53 +22,16 @@ namespace Mdal {
             if (Application.isEditor) {
                 try
                 {
-                    string pluginPath = Path.Combine(Application.dataPath, "Conda");
-                    if (!Directory.Exists(pluginPath)) Directory.CreateDirectory(pluginPath);
-#if UNITY_EDITOR_WIN
-                    string file = Path.Combine(pluginPath, "Library", "bin", test);
-#else
-                    string file = Path.Combine(pluginPath, "bin", test);
-#endif
-                    if (!File.Exists(file))
+                    if (Mdal.GetVersion() != packageVersion)
                     {
                         UpdatePackage();
                         AssetDatabase.Refresh();
                     }
-                    else if (!EditorApplication.isPlayingOrWillChangePlaymode)
-                    {
-                        string currentVersion = "0";
-                        string response;
-                        try
-                        {
-                            using (Process compiler = new Process())
-                            {
-                                compiler.StartInfo.FileName = file;
-                                compiler.StartInfo.Arguments = $" -h";
-                                compiler.StartInfo.UseShellExecute = false;
-                                compiler.StartInfo.RedirectStandardOutput = true;
-                                compiler.StartInfo.CreateNoWindow = true;
-                                compiler.Start();
-
-                                response = compiler.StandardOutput.ReadToEnd();
-
-                                compiler.WaitForExit();
-                            }
-                            currentVersion = response.Split(new char[3] {' ','\r', '\n'})[1];
-                        } catch (Exception e)
-                        {
-                            Debug.Log($"Mdal Version error : {e.ToString()}");
-                        }
-                        if (currentVersion != packageVersion)
-                        {
-                            UpdatePackage();
-                        }
-                        AssetDatabase.Refresh();
-                    }
                 }
-                catch (Exception e)
+                catch
                 {
-                    // do nothing
-                    Debug.Log($"Error in Conda Package {test} : {e.ToString()}");
+                    UpdatePackage();
+                    AssetDatabase.Refresh();
                 };
             };
 
@@ -88,37 +39,17 @@ namespace Mdal {
             stopwatch.Stop();
             Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds");
         }
+
+
         static void UpdatePackage() {
-            Debug.Log("Mdal Install Script Awake"); 
-            string pluginPath = Path.Combine(Application.dataPath, "Conda");
+            Debug.Log("Mdal Install Script Awake");
             string path = Path.GetDirectoryName(new StackTrace(true).GetFrame(0).GetFileName());
-            string response;
-            string install = $"mdal={packageVersion}";
-            using (Process compiler = new Process())
-            {
 #if UNITY_EDITOR_WIN
-                compiler.StartInfo.FileName = "powershell.exe";
-                compiler.StartInfo.Arguments = $"-ExecutionPolicy Bypass \"{Path.Combine(path, "install_script.ps1")}\" -package mdal " +
-                                                    $"-install {install} " +
-                                                    $"-destination '{pluginPath}' " +
-                                                    $"-shared_assets '{Application.streamingAssetsPath}' ";
+            path = Path.Combine(path, "install_script.ps1");
 #else
-                compiler.StartInfo.FileName = "/bin/bash";
-                compiler.StartInfo.Arguments = $" {basharg} \"{Path.Combine(path, "install_script.sh")}\" " +
-                                                "-p mdal " +
-                                                $"-i {install} " +
-                                                $"-d '{pluginPath}' " +
-                                                $"-s '{Application.streamingAssetsPath}'  ";
+            path = Path.Combine(path, "install_script.sh");
 #endif
-                compiler.StartInfo.UseShellExecute = false;
-                compiler.StartInfo.RedirectStandardOutput = true;
-                compiler.StartInfo.CreateNoWindow = true;
-                compiler.Start();
-
-                response = compiler.StandardOutput.ReadToEnd();
-
-                compiler.WaitForExit();
-            }
+            string response = Conda.Conda.Install($"mdal={packageVersion}", path);
             Debug.Log(response);
         }
     }

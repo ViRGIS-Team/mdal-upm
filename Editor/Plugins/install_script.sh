@@ -3,7 +3,6 @@
 while getopts "p:i:d:s:" opt
 do
    case "$opt" in
-      p ) package="$OPTARG" ;;
       d ) destination="$OPTARG" ;;
       i ) install="$OPTARG" ;;
       s ) shared_assets="$OPTARG" ;;

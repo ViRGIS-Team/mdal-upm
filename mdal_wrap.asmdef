@@ -1,10 +1,11 @@
 {
     "name": "Mdal-unity",
+    "rootNamespace": "",
     "references": [
-        "geometry3Sharp"
+        "geometry3Sharp",
+        "CondaExt"
     ],
-    "includePlatforms": [
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
