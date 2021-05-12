@@ -20,7 +20,8 @@ scopedRegistries": [
       "url": "https://package.openupm.com",
       "scopes": [
         "com.openupm",
-        "com.virgis.geometry3sharp"
+        "com.virgis.geometry3sharp",
+        "com.virgis.conda-extensions"
       ]
     }
   ],
