@@ -30,10 +30,6 @@ scopedRegistries": [
 
 The Package can also be installed using the Unity Package Manager directly from the [GitHub Repo](https://github.com/ViRGIS-Team/mdal-upm).
 
-This package is dependent on the following packages having been loaded (and the UPM / GH combination does not allow package dependencies  - so you have to do that yourself) :
-
-- Geometry3Sharp -[UPM GH Repo](https://github.com/ViRGIS-Team/geometry3Sharp). This providse the Mesh data structure and manipulation tools in c#
-
 The UPM package is based on the Conda package which has depedencies on other Conda packages but that is not apparent to the user.
 
 ## Version numbers
