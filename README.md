@@ -76,7 +76,7 @@ This package installs the GDAL package, which copies data for GDAL and for PROJ 
 
 ## Documentation
 
-See [the API Documentation](https://virgis-team.github.io/mdal-upm/html/index.html).
+See [the API Documentation](https://virgis-team.github.io/mdal-upm/html/annotated.html).
 
 A typical sample program :
 
