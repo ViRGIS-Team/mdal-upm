@@ -9,15 +9,17 @@ do
    esac
 done
 
-conda install -c conda-forge --prefix $destination --copy --mkdir $install -y
+outp=$(conda install -c conda-forge --prefix "$destination" --copy --mkdir $install -y -vv  2>&1)
 
-echo "Processing gdal data"
-echo "copy $destination/share/gdal to $shared_assets"
+echo $outp > "$destination"/mdal_log.txt
+
+echo "Processing gdal data" >> "$destination"/mdal_log.txt 2>&1
+echo "copy $destination/share/gdal to $shared_assets" >> "$destination"/mdal_log.txt 2>&1
 mkdir -p "$shared_assets/gdal" 
 cp "$destination"/share/gdal/* "$shared_assets/gdal"
 
-echo "Processing proj data"
-echo "copy $destination/share/proj to $shared_assets"
+echo "Processing proj data" >> "$destination"/mdal_log.txt 2>&1
+echo "copy $destination/share/proj to $shared_assets" >> "$destination"/mdal_log.txt 2>&1
 mkdir -p "$shared_assets/proj" 
 cp "$destination"/share/proj/* "$shared_assets/proj"
 
