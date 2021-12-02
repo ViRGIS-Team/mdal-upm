@@ -9,7 +9,7 @@ namespace Mdal {
 
     public class Install{
 
-        const string packageVersion = "0.8.1";
+        const string packageVersion = "0.9.0";
 
         [InitializeOnLoadMethod]
         static void OnProjectLoadedinEditor()
