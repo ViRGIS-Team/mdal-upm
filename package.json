@@ -1,8 +1,8 @@
 {
   "name": "com.virgis.mdal",
-  "version": "0.9.300",
+  "version": "0.9.400",
   "displayName": "Mdal",
-  "description": "Open-Source Mesh Data Translation LIbrary v0.9.3",
+  "description": "Open-Source Mesh Data Translation LIbrary v0.9.4",
 
   "unity": "2018.1",
   "keywords": [
