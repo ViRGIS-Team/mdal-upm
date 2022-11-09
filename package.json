@@ -32,8 +32,8 @@
     }
   ],
   "dependencies": {
-    "com.virgis.geometry3sharp": "1.0.4",
-    "com.virgis.conda-extensions": "1.0.2"
+    "com.virgis.geometry3sharp": "2.0.0",
+    "com.virgis.conda-extensions": "1.0.3"
   }
 }
 
