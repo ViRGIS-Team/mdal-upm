@@ -3,7 +3,6 @@
 while getopts "p:i:d:s:" opt
 do
    case "$opt" in
-      p ) platform="$OPTARG" ;;
       d ) destination="$OPTARG" ;;
       i ) install="$OPTARG" ;;
       s ) shared_assets="$OPTARG" ;;
@@ -12,16 +11,9 @@ done
 
 export PATH=~/local/miniconda3/bin:$PATH
 
-outp=$(conda install -c conda-forge --prefix "$destination" --copy --mkdir python -y -vv  2>&1)
+outp=$(conda install -c conda-forge --prefix "$destination" --copy --mkdir $install -y -vv  2>&1)
 
-export CONDA_SUBDIR=$platform
-echo $CONDA_SUBDIR > "$destination"/mdal_log.txt
-echo $outp >> "$destination"/mdal_log.txt
-
-outp=$(conda install -c conda-forge --prefix "$destination" --copy $install -y -vv  2>&1)
-
-echo $CONDA_SUBDIR > "$destination"/pdal_log.txt
-echo $outp >> "$destination"/pdal_log.txt
+echo $outp > "$destination"/mdal_log.txt
 
 echo "Processing gdal data" >> "$destination"/mdal_log.txt 2>&1
 echo "copy $destination/share/gdal to $shared_assets" >> "$destination"/mdal_log.txt 2>&1
@@ -37,5 +29,3 @@ find "$destination" -type d -not \( -name *bin -or -name *lib -or -name *Conda -
 
 find "$destination/lib" -type d -not -name *lib -maxdepth 1 -print0 | xargs -0 -I {} rm -r {}
 rm "$destination/lib/terminfo"
-
-rm "$destination"/lib/python3.1
