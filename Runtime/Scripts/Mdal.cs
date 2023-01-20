@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
-using UnityEngine;
 
 namespace Mdal {
 
@@ -71,7 +70,7 @@ namespace Mdal {
         /// <param name="uri"> <see cref="string" /> The URI for Datasource</param>
         /// <returns>a <see cref ="string" /> containing a list of URIs separated by ;;</returns>
         public static string GetNames(string uri) {
-            StringBuilder stb = new StringBuilder(uri);
+            StringBuilder stb = new(uri);
             IntPtr ret = MDAL_MeshNames(stb);
             return Marshal.PtrToStringAnsi(ret); 
         }
@@ -168,11 +167,11 @@ namespace Mdal {
     /// An Instance of an MDAL Datasource
     /// </summary>
     public class Datasource {
-        string uri;
+
         public string[] meshes;
 
-        public Datasource(string uri) {
-            this.uri = uri;
+        public Datasource() {
+
         }
 
         /// <summary>
@@ -182,7 +181,7 @@ namespace Mdal {
         /// <returns><see cref="Datasource" /></returns>
         public static Datasource Load(string uri)
         {
-            Datasource ds = new Datasource(uri);
+            Datasource ds = new();
             string ret = Mdal.GetNames(uri);
             MDAL_Status status = Mdal.LastStatus();
             if (ret == null && status != MDAL_Status.None)
@@ -198,7 +197,7 @@ namespace Mdal {
         /// <returns><see cref="Task" /> running <see cref="Datasource.Load(string)" /> </returns>
         public static Task<Datasource> LoadAsync(string uri)
         {
-            Task<Datasource> t1 = new Task<Datasource>(() =>
+            Task<Datasource> t1 = new(() =>
             {
                 return Datasource.Load(uri);
             });
@@ -212,7 +211,7 @@ namespace Mdal {
         /// <param name="index"><see cref="int" /> Index of the Mesh in the Datasource</param>
         /// <returns><see cref="MdalMesh" /></returns>
         public MdalMesh GetMesh(int index) {
-            StringBuilder stb = new StringBuilder(meshes[index]);
+            StringBuilder stb = new(meshes[index]);
             return Mdal.MDAL_LoadMesh(stb);
         }
 
@@ -223,7 +222,7 @@ namespace Mdal {
         /// <returns><see cref="Task" /> running <see cref="Datasource.GetMesh(int)" /></returns>
         public Task<MdalMesh> GetMeshAsync(int index)
         {
-            Task<MdalMesh> t1 = new Task<MdalMesh>(() => {
+            Task<MdalMesh> t1 = new(() => {
                 return GetMesh(index);
             });
             t1.Start();
@@ -268,14 +267,17 @@ namespace Mdal {
             return Mdal.MDAL_M_datasetGroup(this, index);
         }
 
+        /// <summary>
+        /// The Basic Mesh Creation. Turns an MDAL mesh into a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">Simplemesh</a>
+        /// </summary>
+        /// <returns></returns>
         private SimpleMesh ToMesh() {
             int vcount = GetVertexCount();
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(this);
             VectorArray3d v = GetVertexes(vi, vcount);
             vi.Dispose();
-            bool hasColors;
-            VectorArray3f c = GetColors(vcount, out hasColors);
-            SimpleMesh mesh = new SimpleMesh();
+            VectorArray3f c = GetColors(vcount, out bool hasColors);
+            SimpleMesh mesh = new();
             mesh.AppendVertices(v, null, c);
             int fcount = GetFaceCount();
             MdalFaceIterator fi = Mdal.MDAL_M_faceIterator(this);
@@ -285,6 +287,12 @@ namespace Mdal {
             return mesh;
         }
 
+        /// <summary>
+        /// Fetch the Colors for an MDAL mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3f.html">VectorArray3f</a>
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="hasColors"></param>
+        /// <returns></returns>
         VectorArray3f GetColors(int count, out bool hasColors) {
             hasColors = false;
             int dgCount = GetGroupCount();
@@ -317,8 +325,12 @@ namespace Mdal {
             return new VectorArray3f(colors);
         }
 
+        /// <summary>
+        /// Fetch an MDAL Mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a> with MetaData
+        /// </summary>
+        /// <returns></returns>
         private DMesh3 ToDMesh() {
-            DMesh3 mesh = new DMesh3(this.ToMesh(), MeshHints.None, MeshComponents.VertexColors);
+            DMesh3 mesh = new(ToMesh(), MeshHints.None, MeshComponents.VertexColors);
             string CRS = Mdal.GetCRS(this);
             if (CRS != null)
                 mesh.AttachMetadata("CRS", CRS);
@@ -363,11 +375,10 @@ namespace Mdal {
             if (faceSize > 4)
                 throw new NotSupportedException("Only Tri and Quad Meshes supported");
             int[] faces;
-            int[] faceOff;
-            faces = GetFaces(fi, count, faceSize, out faceOff);
+            faces = GetFaces(fi, count, faceSize, out int[] faceOff);
             if (faceSize == 4)
             {
-                List<int> ret = new List<int>();
+                List<int> ret = new();
                 int previous = 0;
                 for (int i = 0; i < count; i++)
                 {
@@ -400,7 +411,7 @@ namespace Mdal {
         {
             int[] faces = new int[count * faceSize];
             faceOff = new int[count];
-            int rcount = Mdal.MDAL_FI_next(fi, count, faceOff, count * faceSize, faces);
+            Mdal.MDAL_FI_next(fi, count, faceOff, count * faceSize, faces);
             return faces;
         }
     }
@@ -452,7 +463,7 @@ namespace Mdal {
     /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv418MDAL_DatasetGroupH">MDAL_DatasetGroupH</a>
     /// </summary>
     public sealed class MdalDatasetGroup : SafeHandleZeroOrMinusOneIsInvalid {
-        public List<MdalDataset> datasets = new List<MdalDataset>();
+        public List<MdalDataset> datasets = new();
 
         public MdalDatasetGroup() : base(ownsHandle: true) {
 
@@ -509,7 +520,7 @@ namespace Mdal {
     
         public Voxel CreateNewGridElement(bool bCopy)
         {
-            Voxel ret = new Voxel();
+            Voxel ret = new();
             if (bCopy)
             {
                 ret.color = color;
@@ -529,8 +540,8 @@ namespace Mdal {
     /// The rows can be arbitrary lengths (and indeed shape)
     /// </summary>
     public sealed class VoxelMesh: IEnumerable {
-        List<Voxel> m_Voxels;
-        List<int> colIndices;
+        readonly List<Voxel> m_Voxels;
+        readonly List<int> colIndices;
         public Dictionary<string, string> MetaData;
 
         public VoxelMesh(){
@@ -636,10 +647,7 @@ namespace Mdal {
 
         public Task<VoxelMesh> ToVoxelMeshAsync()
         {
-            Task<VoxelMesh> t1 = new Task<VoxelMesh>(() =>
-            {
-                return ToVoxelMesh();
-            });
+            Task<VoxelMesh> t1 = new(() => { return ToVoxelMesh(); });
             t1.Start();
             return t1;
         }
@@ -655,7 +663,7 @@ namespace Mdal {
                 throw new Exception($"{GetGroup().GetName()} is not a Volumetric dataset", new ArgumentException());
             }
 
-            VoxelMesh vmesh = new VoxelMesh();
+            VoxelMesh vmesh = new();
 
             // Get the total volume count
 
@@ -680,8 +688,7 @@ namespace Mdal {
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(mesh);
             VectorArray3d vertices = mesh.GetVertexes(vi, vcount);
             MdalFaceIterator fi = Mdal.MDAL_M_faceIterator(mesh);
-            int[] faceOff;
-            int[] faces = mesh.GetFaces(fi, fcount, Mdal.MDAL_M_faceVerticesMaximumCount(mesh), out faceOff);
+            int[] faces = mesh.GetFaces(fi, fcount, Mdal.MDAL_M_faceVerticesMaximumCount(mesh), out int[] faceOff);
 
 
             // Get the data
