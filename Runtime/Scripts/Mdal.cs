@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
+using System.Linq;
 
 namespace Mdal {
 
@@ -59,6 +60,25 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_LoadMesh")]
         public static extern MdalMesh MDAL_LoadMesh([MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
 
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_CloseMesh")]
+        public static extern void MDAL_CloseMesh(MdalMesh mesh);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_CreateMesh")]
+        public static extern MdalMesh MDAL_CreateMesh(IntPtr driver);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_driverFromName")]
+        public static extern IntPtr MDAL_driverFromName([MarshalAs(UnmanagedType.LPStr)] StringBuilder name);
+
+        public static MdalMesh CreateMeshFromUri(string uri)
+        {
+            string[] parts = uri.Split(':');
+            StringBuilder driverName = new StringBuilder(parts[0]);
+            IntPtr driver = MDAL_driverFromName(driverName);
+            MdalMesh mesh = MDAL_CreateMesh(driver);
+            mesh.uri = uri;
+            return mesh;
+        }
+
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_MeshNames")]
         private static extern IntPtr MDAL_MeshNames([MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
 
@@ -89,6 +109,15 @@ namespace Mdal {
 
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_projection")]
         private static extern IntPtr MDAL_M_projection(MdalMesh pointer);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_SaveMeshWithUri")]
+        public static extern void MDAL_SaveMeshWithUri(MdalMesh mesh, [MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_addVertices")]
+        public static extern void MDAL_M_addVertices(MdalMesh mesh, int vertexCount, double[] coordinates);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_addFaces")]
+        public static extern void MDAL_M_addFaces(MdalMesh mesh, int faceCount, int[] faceSizes, int[] vertexIndices);
 
 
         /// <summary>
@@ -211,8 +240,11 @@ namespace Mdal {
         /// <param name="index"><see cref="int" /> Index of the Mesh in the Datasource</param>
         /// <returns><see cref="MdalMesh" /></returns>
         public MdalMesh GetMesh(int index) {
-            StringBuilder stb = new(meshes[index]);
-            return Mdal.MDAL_LoadMesh(stb);
+            string uri = meshes[index];
+            StringBuilder stb = new(uri);
+            MdalMesh mesh = Mdal.MDAL_LoadMesh(stb);
+            mesh.uri = uri;
+            return mesh;
         }
 
         /// <summary>
@@ -239,8 +271,16 @@ namespace Mdal {
     /// </summary>
     public sealed class MdalMesh : SafeHandleZeroOrMinusOneIsInvalid {
 
+        public string uri;
+
         public MdalMesh() : base(ownsHandle: true) {
 
+        }
+
+        public new void Dispose()
+        {
+            Mdal.MDAL_CloseMesh(this);
+            base.Dispose();
         }
 
         protected override bool ReleaseHandle() {
@@ -334,6 +374,48 @@ namespace Mdal {
             string CRS = Mdal.GetCRS(this);
             if (CRS != null)
                 mesh.AttachMetadata("CRS", CRS);
+            return mesh;
+        }
+
+        /// <summary>
+        /// Updates the Mdal Mesh from a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3
+        /// </summary>
+        /// <param name="dmesh"></param>
+        /// <returns>MdalMesh</returns>
+        public static MdalMesh SaveFromDMesh(DMesh3 dmesh, string uri)
+        {
+            MdalMesh mesh = Mdal.CreateMeshFromUri(uri);
+            List<Vector3d> vertices = dmesh.Vertices().ToList();
+            double[] outV= new double[vertices.Count * 3];
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3d v = vertices[i];
+                
+                outV[i * 3 + 0] = v.x;
+                outV[i * 3 + 1] = v.y;
+                outV[i * 3 + 2] = v.z;
+            }
+
+            List<Index3i> tris = dmesh.Triangles().ToList();
+            int[] outF= new int[tris.Count * 3];
+            for (int i = 0; i < tris.Count; i++)
+            {
+                Index3i t = tris[i];
+                outF[i * 3 + 0] = t.a;
+                outF[i * 3 + 1] = t.b;
+                outF[i * 3 + 2] = t.c;
+            }
+
+            int[] faceSizes = new int[tris.Count];
+            Array.Fill(faceSizes, 3);
+
+            Mdal.MDAL_M_addVertices(mesh, vertices.Count, outV);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString())); 
+            Mdal.MDAL_M_addFaces(mesh, faceSizes.Length, faceSizes, outF);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString()));
+            StringBuilder stb = new(uri);
+            Mdal.MDAL_SaveMeshWithUri(mesh, stb);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString()));
             return mesh;
         }
 
