@@ -4,40 +4,44 @@ using System.IO;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-#if UNITY_EDITOR
 namespace Mdal {
 
-    public class Install{
+    public class Install: AssetPostprocessor
+    {
 
         const string packageVersion = "1.0.1";
 
-        [InitializeOnLoadMethod]
-        static void OnProjectLoadedinEditor()
+        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            if (!SessionState.GetBool("MdalInitDone", false))
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
 
-            EditorUtility.DisplayProgressBar("Restoring Conda Package", "MDAL", 0);
+                EditorUtility.DisplayProgressBar("Restoring Conda Package", "MDAL", 0);
 
-            if (Application.isEditor) {
-                try
+                if (Application.isEditor)
                 {
-                    if (Mdal.GetVersion() != packageVersion)
+                    try
+                    {
+                        if (Mdal.GetVersion() != packageVersion)
+                        {
+                            UpdatePackage();
+                            AssetDatabase.Refresh();
+                        }
+                    }
+                    catch
                     {
                         UpdatePackage();
                         AssetDatabase.Refresh();
-                    }
-                }
-                catch
-                {
-                    UpdatePackage();
-                    AssetDatabase.Refresh();
+                    };
                 };
-            };
 
-            EditorUtility.ClearProgressBar();
-            stopwatch.Stop();
-            Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds");
+                EditorUtility.ClearProgressBar();
+                stopwatch.Stop();
+                Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds");
+            }
+            SessionState.SetBool("MdalInitDone", true);
         }
 
 
@@ -53,4 +57,3 @@ namespace Mdal {
         }
     }
 }
-#endif

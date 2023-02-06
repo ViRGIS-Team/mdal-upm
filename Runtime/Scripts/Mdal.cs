@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
-using UnityEngine;
+using System.Linq;
 
 namespace Mdal {
 
@@ -60,6 +60,25 @@ namespace Mdal {
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_LoadMesh")]
         public static extern MdalMesh MDAL_LoadMesh([MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
 
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_CloseMesh")]
+        public static extern void MDAL_CloseMesh(MdalMesh mesh);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_CreateMesh")]
+        public static extern MdalMesh MDAL_CreateMesh(IntPtr driver);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_driverFromName")]
+        public static extern IntPtr MDAL_driverFromName([MarshalAs(UnmanagedType.LPStr)] StringBuilder name);
+
+        public static MdalMesh CreateMeshFromUri(string uri)
+        {
+            string[] parts = uri.Split(':');
+            StringBuilder driverName = new StringBuilder(parts[0]);
+            IntPtr driver = MDAL_driverFromName(driverName);
+            MdalMesh mesh = MDAL_CreateMesh(driver);
+            mesh.uri = uri;
+            return mesh;
+        }
+
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_MeshNames")]
         private static extern IntPtr MDAL_MeshNames([MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
 
@@ -71,7 +90,7 @@ namespace Mdal {
         /// <param name="uri"> <see cref="string" /> The URI for Datasource</param>
         /// <returns>a <see cref ="string" /> containing a list of URIs separated by ;;</returns>
         public static string GetNames(string uri) {
-            StringBuilder stb = new StringBuilder(uri);
+            StringBuilder stb = new(uri);
             IntPtr ret = MDAL_MeshNames(stb);
             return Marshal.PtrToStringAnsi(ret); 
         }
@@ -90,6 +109,15 @@ namespace Mdal {
 
         [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_projection")]
         private static extern IntPtr MDAL_M_projection(MdalMesh pointer);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_SaveMeshWithUri")]
+        public static extern void MDAL_SaveMeshWithUri(MdalMesh mesh, [MarshalAs(UnmanagedType.LPStr)] StringBuilder uri);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_addVertices")]
+        public static extern void MDAL_M_addVertices(MdalMesh mesh, int vertexCount, double[] coordinates);
+
+        [DllImport(MDAL_LIBRARY, EntryPoint = "MDAL_M_addFaces")]
+        public static extern void MDAL_M_addFaces(MdalMesh mesh, int faceCount, int[] faceSizes, int[] vertexIndices);
 
 
         /// <summary>
@@ -168,11 +196,11 @@ namespace Mdal {
     /// An Instance of an MDAL Datasource
     /// </summary>
     public class Datasource {
-        string uri;
+
         public string[] meshes;
 
-        public Datasource(string uri) {
-            this.uri = uri;
+        public Datasource() {
+
         }
 
         /// <summary>
@@ -182,7 +210,7 @@ namespace Mdal {
         /// <returns><see cref="Datasource" /></returns>
         public static Datasource Load(string uri)
         {
-            Datasource ds = new Datasource(uri);
+            Datasource ds = new();
             string ret = Mdal.GetNames(uri);
             MDAL_Status status = Mdal.LastStatus();
             if (ret == null && status != MDAL_Status.None)
@@ -198,7 +226,7 @@ namespace Mdal {
         /// <returns><see cref="Task" /> running <see cref="Datasource.Load(string)" /> </returns>
         public static Task<Datasource> LoadAsync(string uri)
         {
-            Task<Datasource> t1 = new Task<Datasource>(() =>
+            Task<Datasource> t1 = new(() =>
             {
                 return Datasource.Load(uri);
             });
@@ -212,8 +240,11 @@ namespace Mdal {
         /// <param name="index"><see cref="int" /> Index of the Mesh in the Datasource</param>
         /// <returns><see cref="MdalMesh" /></returns>
         public MdalMesh GetMesh(int index) {
-            StringBuilder stb = new StringBuilder(meshes[index]);
-            return Mdal.MDAL_LoadMesh(stb);
+            string uri = meshes[index];
+            StringBuilder stb = new(uri);
+            MdalMesh mesh = Mdal.MDAL_LoadMesh(stb);
+            mesh.uri = uri;
+            return mesh;
         }
 
         /// <summary>
@@ -223,7 +254,7 @@ namespace Mdal {
         /// <returns><see cref="Task" /> running <see cref="Datasource.GetMesh(int)" /></returns>
         public Task<MdalMesh> GetMeshAsync(int index)
         {
-            Task<MdalMesh> t1 = new Task<MdalMesh>(() => {
+            Task<MdalMesh> t1 = new(() => {
                 return GetMesh(index);
             });
             t1.Start();
@@ -240,8 +271,16 @@ namespace Mdal {
     /// </summary>
     public sealed class MdalMesh : SafeHandleZeroOrMinusOneIsInvalid {
 
+        public string uri;
+
         public MdalMesh() : base(ownsHandle: true) {
 
+        }
+
+        public new void Dispose()
+        {
+            Mdal.MDAL_CloseMesh(this);
+            base.Dispose();
         }
 
         protected override bool ReleaseHandle() {
@@ -268,21 +307,32 @@ namespace Mdal {
             return Mdal.MDAL_M_datasetGroup(this, index);
         }
 
+        /// <summary>
+        /// The Basic Mesh Creation. Turns an MDAL mesh into a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.SimpleMesh.html">Simplemesh</a>
+        /// </summary>
+        /// <returns></returns>
         private SimpleMesh ToMesh() {
             int vcount = GetVertexCount();
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(this);
-            VectorArray3d v = vi.GetVertexes(vcount);
-            bool hasColors;
-            VectorArray3f c = GetColors(vcount, out hasColors);
-            SimpleMesh mesh = new SimpleMesh();
+            VectorArray3d v = GetVertexes(vi, vcount);
+            vi.Dispose();
+            VectorArray3f c = GetColors(vcount, out bool hasColors);
+            SimpleMesh mesh = new();
             mesh.AppendVertices(v, null, c);
             int fcount = GetFaceCount();
             MdalFaceIterator fi = Mdal.MDAL_M_faceIterator(this);
-            IndexArray3i tri = fi.GetTris(fcount, Mdal.MDAL_M_faceVerticesMaximumCount(this));
+            IndexArray3i tri = GetTris(fi, fcount, Mdal.MDAL_M_faceVerticesMaximumCount(this));
+            fi.Dispose();
             mesh.AppendTriangles(tri);
             return mesh;
         }
 
+        /// <summary>
+        /// Fetch the Colors for an MDAL mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3f.html">VectorArray3f</a>
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="hasColors"></param>
+        /// <returns></returns>
         VectorArray3f GetColors(int count, out bool hasColors) {
             hasColors = false;
             int dgCount = GetGroupCount();
@@ -294,15 +344,15 @@ namespace Mdal {
             double[] blue = new double[count];
             for (int i = 0; i < dgCount; i++) {
                 MdalDatasetGroup dg = GetGroup(i);
-                string name = dg.GetName();
+                string name = dg.GetName().ToLower();
                 dg.GetDatasets();
-                if (name == "red" && dg.datasets.Count > 0) {
+                if (name.StartsWith("r") && dg.datasets.Count > 0) {
                     dg.datasets[0].GetValuesAsScalar(ref red);
                     hasColors = true;
                 }
-                if (name == "green" && dg.datasets.Count > 0)
+                if (name.StartsWith("g") && dg.datasets.Count > 0)
                     dg.datasets[0].GetValuesAsScalar(ref green);
-                if (name == "blue" && dg.datasets.Count > 0)
+                if (name.StartsWith("b") && dg.datasets.Count > 0)
                     dg.datasets[0].GetValuesAsScalar(ref blue);
             }
             if (hasColors) {
@@ -315,11 +365,57 @@ namespace Mdal {
             return new VectorArray3f(colors);
         }
 
+        /// <summary>
+        /// Fetch an MDAL Mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a> with MetaData
+        /// </summary>
+        /// <returns></returns>
         private DMesh3 ToDMesh() {
-            DMesh3 mesh = new DMesh3(this.ToMesh(), MeshHints.None, MeshComponents.VertexColors);
+            DMesh3 mesh = new(ToMesh(), MeshHints.None, MeshComponents.VertexColors);
             string CRS = Mdal.GetCRS(this);
             if (CRS != null)
                 mesh.AttachMetadata("CRS", CRS);
+            return mesh;
+        }
+
+        /// <summary>
+        /// Updates the Mdal Mesh from a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3
+        /// </summary>
+        /// <param name="dmesh"></param>
+        /// <returns>MdalMesh</returns>
+        public static MdalMesh SaveFromDMesh(DMesh3 dmesh, string uri)
+        {
+            MdalMesh mesh = Mdal.CreateMeshFromUri(uri);
+            List<Vector3d> vertices = dmesh.Vertices().ToList();
+            double[] outV= new double[vertices.Count * 3];
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector3d v = vertices[i];
+                
+                outV[i * 3 + 0] = v.x;
+                outV[i * 3 + 1] = v.y;
+                outV[i * 3 + 2] = v.z;
+            }
+
+            List<Index3i> tris = dmesh.Triangles().ToList();
+            int[] outF= new int[tris.Count * 3];
+            for (int i = 0; i < tris.Count; i++)
+            {
+                Index3i t = tris[i];
+                outF[i * 3 + 0] = t.a;
+                outF[i * 3 + 1] = t.b;
+                outF[i * 3 + 2] = t.c;
+            }
+
+            int[] faceSizes = new int[tris.Count];
+            Array.Fill(faceSizes, 3);
+
+            Mdal.MDAL_M_addVertices(mesh, vertices.Count, outV);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString())); 
+            Mdal.MDAL_M_addFaces(mesh, faceSizes.Length, faceSizes, outF);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString()));
+            StringBuilder stb = new(uri);
+            Mdal.MDAL_SaveMeshWithUri(mesh, stb);
+            if (Mdal.LastStatus() != MDAL_Status.None) throw (new Exception(Mdal.LastStatus().ToString()));
             return mesh;
         }
 
@@ -336,49 +432,17 @@ namespace Mdal {
         /// </summary>
         /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a></returns>
         public static implicit operator DMesh3(MdalMesh thisMesh) => thisMesh.ToDMesh();
-    }
-
-    /// <summary>
-    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv424MDAL_MeshVertexIteratorH"> MDAL_MeshVertexIteratorH </a>
-    /// </summary>
-    public sealed class MdalVertexIterator : SafeHandleZeroOrMinusOneIsInvalid {
-        
-        public MdalVertexIterator() : base (ownsHandle: true) {
-
-        }
-
-        protected override bool ReleaseHandle() {
-            Mdal.MDAL_VI_close(this);
-            return Mdal.LastStatus() == 0;
-        }
 
         /// <summary>
         /// Get the verteces of the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3d.html">VectorArray3d</a>
         /// </summary>
         /// <param name="count"><see cref="int"/> int number of verteces to fetch</param>
         /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3d.html">VectorArray3d</a></returns>
-        public VectorArray3d GetVertexes(int count) {
+        public VectorArray3d GetVertexes(MdalVertexIterator vi, int count)
+        {
             double[] vertexes = new double[count * 3];
-            Mdal.MDAL_VI_next(this, count, vertexes);
+            Mdal.MDAL_VI_next(vi, count, vertexes);
             return new VectorArray3d(vertexes);
-        }
-    }
-
-    /// <summary>
-    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv422MDAL_MeshFaceIteratorH">MDAL_MeshFaceIteratorH</a>
-    /// </summary>
-    public sealed class MdalFaceIterator : SafeHandleZeroOrMinusOneIsInvalid
-    {
-
-        public MdalFaceIterator() : base(ownsHandle: true)
-        {
-
-        }
-
-        protected override bool ReleaseHandle()
-        {
-            Mdal.MDAL_FI_close(this);
-            return Mdal.LastStatus() == 0;
         }
 
         /// <summary>
@@ -388,16 +452,15 @@ namespace Mdal {
         /// <param name="count"><see cref="int"> Number of faces to fetch </param>
         /// <param name="faceSize"><see cref="int"/> Largest Face size</param>
         /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.IndexArray3i.html">IndexArray3i</a></returns>
-        public IndexArray3i GetTris(int count, int faceSize)
+        public IndexArray3i GetTris(MdalFaceIterator fi, int count, int faceSize)
         {
             if (faceSize > 4)
                 throw new NotSupportedException("Only Tri and Quad Meshes supported");
             int[] faces;
-            int[] faceOff;
-            faces = GetFaces(count, faceSize, out faceOff);
+            faces = GetFaces(fi, count, faceSize, out int[] faceOff);
             if (faceSize == 4)
             {
-                List<int> ret = new List<int>();
+                List<int> ret = new();
                 int previous = 0;
                 for (int i = 0; i < count; i++)
                 {
@@ -426,11 +489,55 @@ namespace Mdal {
         /// <param name="faceSize"> maximum size of face - should be the result from MDAL_M_faceVerticesMaximumCount</param>
         /// <param name="faceOff"> array for the face offsets</param>
         /// <returns>int[] of the faces - will be sparse</returns>
-        public int[] GetFaces(int count, int faceSize, out int[] faceOff) {
+        public int[] GetFaces(MdalFaceIterator fi, int count, int faceSize, out int[] faceOff)
+        {
             int[] faces = new int[count * faceSize];
             faceOff = new int[count];
-            int rcount = Mdal.MDAL_FI_next(this, count, faceOff, count * faceSize, faces);
+            Mdal.MDAL_FI_next(fi, count, faceOff, count * faceSize, faces);
             return faces;
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv424MDAL_MeshVertexIteratorH"> MDAL_MeshVertexIteratorH </a>
+    /// </summary>
+    public sealed class MdalVertexIterator : SafeHandleZeroOrMinusOneIsInvalid {
+        
+        public MdalVertexIterator() : base (ownsHandle: true) {
+
+        }
+
+        public new void Dispose()
+        {
+            Mdal.MDAL_VI_close(this);
+            base.Dispose();
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv422MDAL_MeshFaceIteratorH">MDAL_MeshFaceIteratorH</a>
+    /// </summary>
+    public sealed class MdalFaceIterator : SafeHandleZeroOrMinusOneIsInvalid
+    {
+        public MdalFaceIterator() : base(ownsHandle: true)
+        {
+
+        }
+
+        public new void Dispose()
+        {
+            Mdal.MDAL_FI_close(this);
+            base.Dispose();
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            return true;
         }
     }
 
@@ -438,7 +545,7 @@ namespace Mdal {
     /// Wrapper for an instance of <a href="https://www.mdal.xyz/api/mdal_c_api.html#_CPPv418MDAL_DatasetGroupH">MDAL_DatasetGroupH</a>
     /// </summary>
     public sealed class MdalDatasetGroup : SafeHandleZeroOrMinusOneIsInvalid {
-        public List<MdalDataset> datasets = new List<MdalDataset>();
+        public List<MdalDataset> datasets = new();
 
         public MdalDatasetGroup() : base(ownsHandle: true) {
 
@@ -495,7 +602,7 @@ namespace Mdal {
     
         public Voxel CreateNewGridElement(bool bCopy)
         {
-            Voxel ret = new Voxel();
+            Voxel ret = new();
             if (bCopy)
             {
                 ret.color = color;
@@ -515,8 +622,8 @@ namespace Mdal {
     /// The rows can be arbitrary lengths (and indeed shape)
     /// </summary>
     public sealed class VoxelMesh: IEnumerable {
-        List<Voxel> m_Voxels;
-        List<int> colIndices;
+        readonly List<Voxel> m_Voxels;
+        readonly List<int> colIndices;
         public Dictionary<string, string> MetaData;
 
         public VoxelMesh(){
@@ -622,10 +729,7 @@ namespace Mdal {
 
         public Task<VoxelMesh> ToVoxelMeshAsync()
         {
-            Task<VoxelMesh> t1 = new Task<VoxelMesh>(() =>
-            {
-                return ToVoxelMesh();
-            });
+            Task<VoxelMesh> t1 = new(() => { return ToVoxelMesh(); });
             t1.Start();
             return t1;
         }
@@ -641,7 +745,7 @@ namespace Mdal {
                 throw new Exception($"{GetGroup().GetName()} is not a Volumetric dataset", new ArgumentException());
             }
 
-            VoxelMesh vmesh = new VoxelMesh();
+            VoxelMesh vmesh = new();
 
             // Get the total volume count
 
@@ -664,10 +768,9 @@ namespace Mdal {
             GetValuesAsFaceIndices(ref faceIndices);
 
             MdalVertexIterator vi = Mdal.MDAL_M_vertexIterator(mesh);
-            VectorArray3d vertices = vi.GetVertexes(vcount);
+            VectorArray3d vertices = mesh.GetVertexes(vi, vcount);
             MdalFaceIterator fi = Mdal.MDAL_M_faceIterator(mesh);
-            int[] faceOff;
-            int[] faces = fi.GetFaces(fcount, Mdal.MDAL_M_faceVerticesMaximumCount(mesh), out faceOff);
+            int[] faces = mesh.GetFaces(fi, fcount, Mdal.MDAL_M_faceVerticesMaximumCount(mesh), out int[] faceOff);
 
 
             // Get the data
