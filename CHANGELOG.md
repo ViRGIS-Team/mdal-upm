@@ -1,5 +1,9 @@
 This plugin will be updated as and when new versions of MDAL are released and will use the version numbers from MDAL.
 
+# Version 1.0.102
+
+Correct the Editor Assemblies so that it runs under cloud build
+
 # Version 1.0.101
 
 Updates MDAL to version 1.0.1.
