@@ -1,0 +1,19 @@
+{
+    "name": "mdal-wrap.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:edb99114c63104e88a387a126b65c329",
+        "GUID:83effd094efe6004b80873fc3bca03ec"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
