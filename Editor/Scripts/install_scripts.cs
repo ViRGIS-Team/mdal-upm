@@ -9,7 +9,7 @@ namespace Mdal {
     public class Install: AssetPostprocessor
     {
 
-        const string packageVersion = "1.0.1";
+        const string packageVersion = "1.0.3";
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
