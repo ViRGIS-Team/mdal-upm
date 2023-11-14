@@ -25,7 +25,7 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.openupm",
-        "com.virgis.geometry3sharp",
+        "com.virgis.geometry",
         "com.virgis.gdal",
         "com.virgis.conda-extensions"
       ]
