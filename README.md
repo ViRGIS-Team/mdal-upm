@@ -1,4 +1,5 @@
 [![openupm](https://img.shields.io/npm/v/com.virgis.mdal?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.virgis.mdal/)
+![Build Status](http://unitybuildbadge.azurewebsites.net/api/status/a243be3f-e1da-4bce-9907-28576d902413)
 
 # Unity Package for MDAL
 
