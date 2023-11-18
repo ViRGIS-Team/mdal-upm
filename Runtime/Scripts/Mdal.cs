@@ -7,6 +7,7 @@ using System.Text;
 using g3;
 using Microsoft.Win32.SafeHandles;
 using System.Linq;
+using UnityEngine;
 
 namespace Mdal {
 
@@ -432,6 +433,14 @@ namespace Mdal {
         /// </summary>
         /// <returns><a href="https://virgis-team.github.io/geometry3Sharp/api/g3.DMesh3.html">DMesh3</a></returns>
         public static implicit operator DMesh3(MdalMesh thisMesh) => thisMesh.ToDMesh();
+
+
+        /// <summary>
+        /// Returns the mesh as a Unity Mesh</a>
+        ///
+        /// </summary>
+        /// <returns>Mesh</a></returns>
+        public static implicit operator Mesh(MdalMesh thisMesh) => (Mesh)thisMesh.ToDMesh();
 
         /// <summary>
         /// Get the verteces of the mesh as a <a href="https://virgis-team.github.io/geometry3Sharp/api/g3.VectorArray3d.html">VectorArray3d</a>

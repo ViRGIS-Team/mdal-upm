@@ -1,5 +1,9 @@
 This plugin will be updated as and when new versions of MDAL are released and will use the version numbers from MDAL.
 
+# Version 1.0.302
+
+Adds the ability to implicitly convert the MDAL mesh to a Unity Mesh
+
 # Version 1.0.102
 
 Correct the Editor Assemblies so that it runs under cloud build
