@@ -17,6 +17,7 @@ namespace Mdal {
             if (!SessionState.GetBool("MdalInitDone", false))
             {
                 Stopwatch stopwatch = new Stopwatch();
+                string response = "";
                 stopwatch.Start();
 
                 EditorUtility.DisplayProgressBar("Restoring Conda Package", "MDAL", 0);
@@ -27,26 +28,26 @@ namespace Mdal {
                     {
                         if (Mdal.GetVersion() != packageVersion)
                         {
-                            UpdatePackage();
+                            response = UpdatePackage();
                             AssetDatabase.Refresh();
                         }
                     }
                     catch
                     {
-                        UpdatePackage();
+                        response = UpdatePackage();
                         AssetDatabase.Refresh();
                     };
                 };
 
                 EditorUtility.ClearProgressBar();
                 stopwatch.Stop();
-                Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds");
+                Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds" + response);
             }
             SessionState.SetBool("MdalInitDone", true);
         }
 
 
-        static void UpdatePackage() {
+        static string UpdatePackage() {
             Debug.Log("Mdal Install Script Awake");
             string path = Path.GetDirectoryName(new StackTrace(true).GetFrame(0).GetFileName());
 
@@ -91,6 +92,7 @@ namespace Mdal {
                 _ = e;
             }
             Conda.Conda.TreeShake();
+            return response;
         }
     }
 }
