@@ -31,8 +31,7 @@
     }
   ],
   "dependencies": {
-    "com.virgis.geometry": "4.0.0",
-    "com.virgis.conda-extensions": "1.0.4",
-    "com.virgis.gdal": "3.11.1"
+    "com.virgis.geometry": "4.0.1",
+    "com.virgis.conda-extensions": "1.0.4"
   }
 }
