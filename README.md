@@ -34,7 +34,7 @@ The UPM package is based on the Conda package which has dependencies on other Co
 
 ## Build Tests and Platform Support
 
-This p[ackage is build tested on multiple platforms using the [ViRGiS Team Test Project](https://github.com/ViRGIS-Team/test-project).
+This package is build tested on multiple platforms using the [ViRGiS Team Test Project](https://github.com/ViRGIS-Team/test-project).
 
 See that project for working examples and current list of working platforms.
 
@@ -52,7 +52,10 @@ This has the unfortunate side effect that 3.1.001 will revert to 3.1.1 and this 
 | 3.1.0   | 3.1.0   |
 | 3.1.1   | 3.1.0   |
 | 3.1.100 | 3.1.1.  |
- 
+
+## A note about Upgrading
+
+Unity is a bit "graby" about DLLs and SOs. Once it is loaded it keeps a hardlink to the DLL and does not like changing. This means that for this package, once you have upgraded to a new version of the UPM package you will, usually, need to restart the Unity Editor for the change to work.
 
 ## Development and Use in the player
 > NOTE For the avoidance of doubt, conda is NOT required on machines running the distributed Unity application. The required libraries are automatically included in the distribution package created by Unity.
@@ -67,11 +70,11 @@ This Library works on Windows, Mac and Linux platforms.
 
 ## Running in the Editor
 
-This package uses [Conda](https://docs.conda.io/en/latest/) to download the latest version of GDAL.
+This package uses [Conda](https://docs.conda.io/en/latest/) to download the latest version of MDAL.
 
 As of version 1.3.2, this package uses Version 2 of the Conda Extension package. This means that the package now includes a complete self contained and standalone installation of the Conda API. You no longer need to install Conda on your development machines.
 
-Note that when upgrading, you MUST delete the Assets/Conda directtory and restart Unity.
+Note that when upgrading, you MUST delete the Assets/Conda directory and restart Unity.
 
 ## Documentation
 
