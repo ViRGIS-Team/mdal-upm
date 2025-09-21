@@ -15,7 +15,7 @@ namespace Mdal {
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             
-            if (true) //!SessionState.GetBool("MdalInitDone", false))
+            if (!SessionState.GetBool("MdalInitDone", false))
             {
                 Stopwatch stopwatch = new Stopwatch();
                 string response = "";
