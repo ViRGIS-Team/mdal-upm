@@ -14,7 +14,8 @@ namespace Mdal {
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-            if (!SessionState.GetBool("MdalInitDone", false))
+            
+            if (true) //!SessionState.GetBool("MdalInitDone", false))
             {
                 Stopwatch stopwatch = new Stopwatch();
                 string response = "";
@@ -24,20 +25,28 @@ namespace Mdal {
 
                 if (Application.isEditor)
                 {
-                    try
+                    if (Conda.Conda.Info().Items.Any(item => item.name == "mdal" && item.version == packageVersion))
                     {
-                        if (Mdal.GetVersion() != packageVersion)
-                        {
+                        // try
+                        // {
+                        //     if (Mdal.GetVersion() != packageVersion)
+                        //     {
+                        //         response = UpdatePackage();
+                        //         AssetDatabase.Refresh();
+                        //     }
+                        // }
+                        // catch
+                        // {
                             response = UpdatePackage();
                             AssetDatabase.Refresh();
-                        }
+                        //}
                     }
-                    catch
+                    else
                     {
                         response = UpdatePackage();
                         AssetDatabase.Refresh();
-                    };
-                };
+                    }
+                }
 
                 EditorUtility.ClearProgressBar();
                 stopwatch.Stop();
