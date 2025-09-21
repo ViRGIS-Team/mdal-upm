@@ -17,6 +17,7 @@ namespace Mdal {
             
             if (true) //!SessionState.GetBool("MdalInitDone", false))
             {
+                
                 Stopwatch stopwatch = new Stopwatch();
                 string response = "";
                 stopwatch.Start();
@@ -25,7 +26,7 @@ namespace Mdal {
 
                 if (Application.isEditor)
                 {
-                    if (Conda.Conda.Info().Items.Any(item => item.name == "mdal" && item.version == packageVersion))
+                    if (Conda.Conda.IsInstalled("mdal", packageVersion))
                     {
                         // try
                         // {
@@ -37,8 +38,8 @@ namespace Mdal {
                         // }
                         // catch
                         // {
-                            response = UpdatePackage();
-                            AssetDatabase.Refresh();
+                            //response = UpdatePackage();
+                            //AssetDatabase.Refresh();
                         //}
                     }
                     else
