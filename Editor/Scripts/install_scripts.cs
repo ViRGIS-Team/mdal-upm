@@ -17,7 +17,6 @@ namespace Mdal {
             
             if (true) //!SessionState.GetBool("MdalInitDone", false))
             {
-                
                 Stopwatch stopwatch = new Stopwatch();
                 string response = "";
                 stopwatch.Start();
@@ -26,27 +25,9 @@ namespace Mdal {
 
                 if (Application.isEditor)
                 {
-                    if (Conda.Conda.IsInstalled("mdal", packageVersion))
-                    {
-                        // try
-                        // {
-                        //     if (Mdal.GetVersion() != packageVersion)
-                        //     {
-                        //         response = UpdatePackage();
-                        //         AssetDatabase.Refresh();
-                        //     }
-                        // }
-                        // catch
-                        // {
-                            //response = UpdatePackage();
-                            //AssetDatabase.Refresh();
-                        //}
-                    }
-                    else
-                    {
+                    if (!Conda.Conda.IsInstalled("mdal", packageVersion))
                         response = UpdatePackage();
                         AssetDatabase.Refresh();
-                    }
                 }
 
                 EditorUtility.ClearProgressBar();
