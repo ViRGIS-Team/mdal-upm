@@ -14,6 +14,7 @@ namespace Mdal {
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
+            
             if (!SessionState.GetBool("MdalInitDone", false))
             {
                 Stopwatch stopwatch = new Stopwatch();
@@ -24,20 +25,10 @@ namespace Mdal {
 
                 if (Application.isEditor)
                 {
-                    try
-                    {
-                        if (Mdal.GetVersion() != packageVersion)
-                        {
-                            response = UpdatePackage();
-                            AssetDatabase.Refresh();
-                        }
-                    }
-                    catch
-                    {
+                    if (!Conda.Conda.IsInstalled("mdal", packageVersion))
                         response = UpdatePackage();
                         AssetDatabase.Refresh();
-                    };
-                };
+                }
 
                 EditorUtility.ClearProgressBar();
                 stopwatch.Stop();
