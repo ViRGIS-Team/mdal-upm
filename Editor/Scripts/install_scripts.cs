@@ -4,6 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using System;
+using Conda;
 
 namespace Mdal {
 
@@ -17,7 +18,7 @@ namespace Mdal {
             
             if (!SessionState.GetBool("MdalInitDone", false))
             {
-                Stopwatch stopwatch = new Stopwatch();
+                Stopwatch stopwatch = new();
                 string response = "";
                 stopwatch.Start();
 
@@ -25,9 +26,42 @@ namespace Mdal {
 
                 if (Application.isEditor)
                 {
-                    if (!Conda.Conda.IsInstalled("mdal", packageVersion))
+                    CondaApp conda = new();
+                    if (!conda.IsInstalled("mdal", packageVersion))
                     {
-                        response = UpdatePackage();
+                        Debug.Log("Mdal Install Script Awake");
+                        string path = Path.GetDirectoryName(new StackTrace(true).GetFrame(0).GetFileName());
+
+                        conda.Install($"mdal={packageVersion}");
+                        try
+                        {
+                            string sharedAssets = Application.streamingAssetsPath;
+                            if (Directory.Exists(Path.Combine(conda.condaShared, "gdal")))
+                            {
+                                if (!Directory.Exists(sharedAssets)) Directory.CreateDirectory(sharedAssets);
+                                string gdalDir = Path.Combine(sharedAssets, "gdal");
+                                if (!Directory.Exists(gdalDir)) Directory.CreateDirectory(gdalDir);
+                                string projDir = Path.Combine(sharedAssets, "proj");
+                                if (!Directory.Exists(projDir)) Directory.CreateDirectory(projDir);
+
+                                if (Directory.Exists(Path.Combine(conda.condaShared, "gdal")))
+                                    foreach (var file in Directory.GetFiles(Path.Combine(conda.condaShared, "gdal")))
+                                    {
+                                        File.Copy(file, Path.Combine(gdalDir, Path.GetFileName(file)), true);
+                                    }
+
+                                if (Directory.Exists(Path.Combine(conda.condaShared, "proj"))) 
+                                    foreach (var file in Directory.GetFiles(Path.Combine(conda.condaShared, "proj")))
+                                    {
+                                        File.Copy(file, Path.Combine(projDir, Path.GetFileName(file)), true);
+                                    }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
+                        conda.TreeShake();
                         AssetDatabase.Refresh();
                     }
                 }
@@ -37,42 +71,6 @@ namespace Mdal {
                 Debug.Log($"Mdal refresh took {stopwatch.Elapsed.TotalSeconds} seconds" + response);
             }
             SessionState.SetBool("MdalInitDone", true);
-        }
-
-
-        static string UpdatePackage() {
-            Debug.Log("Mdal Install Script Awake");
-            string path = Path.GetDirectoryName(new StackTrace(true).GetFrame(0).GetFileName());
-
-            string response = Conda.Conda.Install($"mdal={packageVersion}");
-            try
-            {
-                string sharedAssets = Application.streamingAssetsPath;
-                if (Directory.Exists(Path.Combine(Conda.Conda.condaShared, "gdal")))
-                {
-                    if (!Directory.Exists(sharedAssets)) Directory.CreateDirectory(sharedAssets);
-                    string gdalDir = Path.Combine(sharedAssets, "gdal");
-                    if (!Directory.Exists(gdalDir)) Directory.CreateDirectory(gdalDir);
-                    string projDir = Path.Combine(sharedAssets, "proj");
-                    if (!Directory.Exists(projDir)) Directory.CreateDirectory(projDir);
-
-                    foreach (var file in Directory.GetFiles(Path.Combine(Conda.Conda.condaShared, "gdal")))
-                    {
-                        File.Copy(file, Path.Combine(gdalDir, Path.GetFileName(file)), true);
-                    }
-
-                    foreach (var file in Directory.GetFiles(Path.Combine(Conda.Conda.condaShared, "proj")))
-                    {
-                        File.Copy(file, Path.Combine(projDir, Path.GetFileName(file)), true);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _ = e;
-            }
-            Conda.Conda.TreeShake();
-            return response;
         }
     }
 }
