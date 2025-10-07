@@ -15,7 +15,7 @@ namespace Mdal {
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
-            
+
             if (!SessionState.GetBool("MdalInitDone", false))
             {
                 Stopwatch stopwatch = new();
@@ -34,7 +34,7 @@ namespace Mdal {
 
                         conda.Add($"mdal={packageVersion}", new ConfigFile.Package()
                         {
-                            Name = "gdal",
+                            Name = "mdal",
                             Cleans = new ConfigFile.Clean[] {},
                             Shared_Datas = new string[] {
                                 "gdal", "proj"
