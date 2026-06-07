@@ -3,7 +3,6 @@ using UnityEditor;
 using System.IO;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
-using System;
 using Conda;
 
 namespace Mdal {
