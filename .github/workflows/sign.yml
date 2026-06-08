@@ -41,11 +41,19 @@ jobs:
 
       - name: Verify Unity UPM CLI
         run: upm --help
-
+        
+      - name: Check environment
+        run: |
+          if [ -z "$UPM_ORG_ID" ]; then
+            echo "UPM_ORG_ID is empty"
+            exit 1
+          fi
+      
+          echo "UPM_ORG_ID length: ${#UPM_ORG_ID}"
+          
       - name: Sign package
         run: |
           mkdir -p "$DIST_DIR"
-          printf 'Org %s/n' "$UPM_ORG_ID"
           upm pack . --organization-id "$UPM_ORG_ID" --destination "$DIST_DIR"
 
       - name: Print signed package info
