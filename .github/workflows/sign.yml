@@ -45,7 +45,7 @@ jobs:
       - name: Sign package
         run: |
           mkdir -p "$DIST_DIR"
-          printf 'Org' "$UPM_ORG_ID"
+          printf 'Org %s/n' "$UPM_ORG_ID"
           upm pack . --organization-id "$UPM_ORG_ID" --destination "$DIST_DIR"
 
       - name: Print signed package info
